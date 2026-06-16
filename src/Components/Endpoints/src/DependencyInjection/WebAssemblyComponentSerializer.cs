@@ -11,6 +11,7 @@ namespace Microsoft.AspNetCore.Components.Endpoints;
 [JsonSerializable(typeof(List<object?>))]
 [JsonSerializable(typeof(ComponentParameter))]
 [JsonSerializable(typeof(IList<ComponentParameter>))]
+[JsonSerializable(typeof(Int32))]
 internal sealed partial class WebAssemblyComponentSerializationContext : JsonSerializerContext
 {
 }

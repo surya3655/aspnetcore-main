@@ -26,7 +26,7 @@ public class SessionCascadingValueSupplierTest
         {
             callbackInvoked = true;
             return "value";
-        });
+        }, typeof(string));
 
         var httpContext = CreateHttpContextWithSession();
         _supplier.SetRequestContext(httpContext);
@@ -38,10 +38,10 @@ public class SessionCascadingValueSupplierTest
     [Fact]
     public void RegisterValueCallback_ThrowsForDuplicateKey()
     {
-        _supplier.RegisterValueCallback("key", () => "value1");
+        _supplier.RegisterValueCallback("key", () => "value1", typeof(string));
 
         var ex = Assert.Throws<InvalidOperationException>(() =>
-            _supplier.RegisterValueCallback("key", () => "value2"));
+            _supplier.RegisterValueCallback("key", () => "value2", typeof(string)));
 
         Assert.Contains("key", ex.Message);
     }
@@ -49,7 +49,7 @@ public class SessionCascadingValueSupplierTest
     [Fact]
     public async Task PersistAllValues_SetsValueInSession()
     {
-        _supplier.RegisterValueCallback("key", () => "persisted value");
+        _supplier.RegisterValueCallback("key", () => "persisted value", typeof(string));
 
         var httpContext = CreateHttpContextWithSession();
         _supplier.SetRequestContext(httpContext);
@@ -64,7 +64,7 @@ public class SessionCascadingValueSupplierTest
         var httpContext = CreateHttpContextWithSession();
         httpContext.Session.SetString("key", "\"existing\"");
 
-        _supplier.RegisterValueCallback("key", () => null);
+        _supplier.RegisterValueCallback("key", () => null, typeof(string));
         _supplier.SetRequestContext(httpContext);
         await _supplier.PersistAllValues();
 
@@ -74,9 +74,9 @@ public class SessionCascadingValueSupplierTest
     [Fact]
     public async Task PersistAllValues_HandlesMultipleKeys()
     {
-        _supplier.RegisterValueCallback("key1", () => "value1");
-        _supplier.RegisterValueCallback("key2", () => "value2");
-        _supplier.RegisterValueCallback("key3", () => "value3");
+        _supplier.RegisterValueCallback("key1", () => "value1", typeof(string));
+        _supplier.RegisterValueCallback("key2", () => "value2", typeof(string));
+        _supplier.RegisterValueCallback("key3", () => "value3", typeof(string));
 
         var httpContext = CreateHttpContextWithSession();
         _supplier.SetRequestContext(httpContext);
@@ -90,8 +90,8 @@ public class SessionCascadingValueSupplierTest
     [Fact]
     public async Task PersistAllValues_ContinuesOnCallbackException()
     {
-        _supplier.RegisterValueCallback("key1", () => throw new InvalidOperationException("Test exception"));
-        _supplier.RegisterValueCallback("key2", () => "value2");
+        _supplier.RegisterValueCallback("key1", () => throw new InvalidOperationException("Test exception"), typeof(string));
+        _supplier.RegisterValueCallback("key2", () => "value2", typeof(string));
 
         var httpContext = CreateHttpContextWithSession();
         _supplier.SetRequestContext(httpContext);
@@ -104,8 +104,8 @@ public class SessionCascadingValueSupplierTest
     [Fact]
     public async Task PersistAllValues_ContinuesOnSerializationException()
     {
-        _supplier.RegisterValueCallback("key1", () => new IntPtr(42));
-        _supplier.RegisterValueCallback("key2", () => "value2");
+        _supplier.RegisterValueCallback("key1", () => new IntPtr(42), typeof(IntPtr));
+        _supplier.RegisterValueCallback("key2", () => "value2", typeof(string));
 
         var httpContext = CreateHttpContextWithSession();
         _supplier.SetRequestContext(httpContext);
@@ -118,7 +118,7 @@ public class SessionCascadingValueSupplierTest
     [Fact]
     public async Task PersistAllValues_LowercasesSessionKey()
     {
-        _supplier.RegisterValueCallback("MyKey", () => "value");
+        _supplier.RegisterValueCallback("MyKey", () => "value", typeof(string));
 
         var httpContext = CreateHttpContextWithSession();
         _supplier.SetRequestContext(httpContext);
@@ -130,7 +130,7 @@ public class SessionCascadingValueSupplierTest
     [Fact]
     public async Task PersistAllValues_NoOp_WhenSessionUnavailable()
     {
-        _supplier.RegisterValueCallback("key", () => "value");
+        _supplier.RegisterValueCallback("key", () => "value", typeof(string));
 
         var httpContext = new DefaultHttpContext();
         httpContext.Features.Set<IHttpResponseFeature>(new TestHttpResponseFeature());
@@ -147,7 +147,7 @@ public class SessionCascadingValueSupplierTest
         {
             callbackInvoked = true;
             return "value";
-        });
+        }, typeof(string));
 
         _supplier.DeleteValueCallback("key");
 
@@ -162,7 +162,7 @@ public class SessionCascadingValueSupplierTest
     [Fact]
     public async Task SetRequestContext_DoesNotRegisterOnStarting_UntilSubscriptionCreated()
     {
-        _supplier.RegisterValueCallback("key", () => "value");
+        _supplier.RegisterValueCallback("key", () => "value", typeof(string));
 
         var httpContext = CreateHttpContextWithSession(out var responseFeature);
         _supplier.SetRequestContext(httpContext);
