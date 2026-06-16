@@ -15,7 +15,11 @@ namespace Microsoft.AspNetCore.Components;
 [JsonSerializable(typeof(IList<ServerComponent>))]
 [JsonSerializable(typeof(ComponentMarker))]
 [JsonSerializable(typeof(ComponentMarkerKey))]
+[JsonSerializable(typeof(ComponentMarker[]))]
+[JsonSerializable(typeof(IEnumerable<ComponentMarker>))]
 [JsonSerializable(typeof(RenderTreeNode))]
+[JsonSerializable(typeof(RenderTreeAttribute))]
+[JsonSerializable(typeof(List<RenderTreeNode>))]
 [JsonSerializable(typeof(Double))]
 internal sealed partial class ServerComponentSerializationContext : JsonSerializerContext
 {
