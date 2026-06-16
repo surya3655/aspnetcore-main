@@ -6,6 +6,17 @@ using System.Text.Json.Serialization;
 
 namespace Microsoft.AspNetCore.Components;
 
+[JsonSourceGenerationOptions(WriteIndented = false)]
+[JsonSerializable(typeof(IList<object?>))]
+[JsonSerializable(typeof(List<object?>))]
+[JsonSerializable(typeof(ComponentParameter))]
+[JsonSerializable(typeof(IList<ComponentParameter>))]
+[JsonSerializable(typeof(ServerComponent))]
+[JsonSerializable(typeof(IList<ServerComponent>))]
+internal sealed partial class ServerComponentSerializationContext : JsonSerializerContext
+{
+}
+
 internal static class ServerComponentSerializationSettings
 {
     public const string DataProtectionProviderPurpose = "Microsoft.AspNetCore.Components.ComponentDescriptorSerializer,V1";
@@ -15,7 +26,8 @@ internal static class ServerComponentSerializationSettings
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             PropertyNameCaseInsensitive = true,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            TypeInfoResolver = ServerComponentSerializationContext.Default
         };
 
     // This setting is not configurable, but realistically we don't expect an app to take more than 30 seconds from when

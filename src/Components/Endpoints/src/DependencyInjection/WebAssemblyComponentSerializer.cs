@@ -2,8 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Microsoft.AspNetCore.Components.Endpoints;
+
+[JsonSourceGenerationOptions(WriteIndented = false)]
+[JsonSerializable(typeof(IList<object?>))]
+[JsonSerializable(typeof(List<object?>))]
+[JsonSerializable(typeof(ComponentParameter))]
+[JsonSerializable(typeof(IList<ComponentParameter>))]
+internal sealed partial class WebAssemblyComponentSerializationContext : JsonSerializerContext
+{
+}
 
 // See the details of the component serialization protocol in WebAssemblyComponentDeserializer.cs on the Components solution.
 internal sealed class WebAssemblyComponentSerializer
@@ -16,8 +26,9 @@ internal sealed class WebAssemblyComponentSerializer
 
         // We need to serialize and Base64 encode parameters separately since they can contain arbitrary data that might
         // cause the HTML comment to be invalid (like if you serialize a string that contains two consecutive dashes "--").
-        var serializedDefinitions = Convert.ToBase64String(JsonSerializer.SerializeToUtf8Bytes(definitions, WebAssemblyComponentSerializationSettings.JsonSerializationOptions));
-        var serializedValues = Convert.ToBase64String(JsonSerializer.SerializeToUtf8Bytes(values, WebAssemblyComponentSerializationSettings.JsonSerializationOptions));
+        var serializationOptions = new JsonSerializerOptions { TypeInfoResolver = WebAssemblyComponentSerializationContext.Default };
+        var serializedDefinitions = Convert.ToBase64String(JsonSerializer.SerializeToUtf8Bytes(definitions, serializationOptions));
+        var serializedValues = Convert.ToBase64String(JsonSerializer.SerializeToUtf8Bytes(values, serializationOptions));
 
         marker.WriteWebAssemblyData(assembly, typeFullName, serializedDefinitions, serializedValues);
     }

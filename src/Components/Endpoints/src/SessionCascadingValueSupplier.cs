@@ -3,7 +3,9 @@
 
 using System.Collections.Concurrent;
 using System.Reflection;
+using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Components.Reflection;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
@@ -13,13 +15,33 @@ using Microsoft.Extensions.Logging;
 
 namespace Microsoft.AspNetCore.Components.Endpoints;
 
+// Source-generated serializer context for session cascading values.
+// This includes common types that can be used with [SupplyParameterFromSession].
+[JsonSourceGenerationOptions(WriteIndented = false, PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
+[JsonSerializable(typeof(int))]
+[JsonSerializable(typeof(bool))]
+[JsonSerializable(typeof(string))]
+[JsonSerializable(typeof(Guid))]
+[JsonSerializable(typeof(DateTime))]
+[JsonSerializable(typeof(int?))]
+[JsonSerializable(typeof(bool?))]
+[JsonSerializable(typeof(Guid?))]
+[JsonSerializable(typeof(DateTime?))]
+[JsonSerializable(typeof(List<int>))]
+[JsonSerializable(typeof(List<bool>))]
+[JsonSerializable(typeof(List<string>))]
+[JsonSerializable(typeof(List<Guid>))]
+[JsonSerializable(typeof(List<DateTime>))]
+internal sealed partial class SessionCascadingValueSerializerContext : JsonSerializerContext
+{
+}
+
 internal partial class SessionCascadingValueSupplier
 {
     private static readonly ConcurrentDictionary<(Type, string), PropertyGetter> _propertyGetterCache = new();
-    private static readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web);
     private HttpContext? _httpContext;
     private bool _onStartingRegistered;
-    private readonly Dictionary<string, Func<object?>> _valueCallbacks = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, (Func<object?> ValueGetter, Type DeclaredType)> _valueCallbacks = new(StringComparer.OrdinalIgnoreCase);
     private readonly ILogger<SessionCascadingValueSupplier> _logger;
 
     public SessionCascadingValueSupplier(ILogger<SessionCascadingValueSupplier> logger)
@@ -47,7 +69,7 @@ internal partial class SessionCascadingValueSupplier
         var componentType = componentState.Component.GetType();
         var getter = _propertyGetterCache.GetOrAdd((componentType, parameterInfo.PropertyName), PropertyGetterFactory);
         Func<object?> valueGetter = () => getter.GetValue(componentState.Component);
-        RegisterValueCallback(sessionKey, valueGetter);
+        RegisterValueCallback(sessionKey, valueGetter, parameterInfo.PropertyType);
         return new SessionSubscription(this, sessionKey, parameterInfo.PropertyType, valueGetter);
     }
 
@@ -64,9 +86,9 @@ internal partial class SessionCascadingValueSupplier
 
     internal ISession? GetSession() => _httpContext?.Features.Get<ISessionFeature>()?.Session;
 
-    internal void RegisterValueCallback(string sessionKey, Func<object?> valueGetter)
+    internal void RegisterValueCallback(string sessionKey, Func<object?> valueGetter, Type declaredType)
     {
-        if (!_valueCallbacks.TryAdd(sessionKey, valueGetter))
+        if (!_valueCallbacks.TryAdd(sessionKey, (valueGetter, declaredType)))
         {
             throw new InvalidOperationException($"A callback is already registered for the session key '{sessionKey}'. Multiple components cannot use the same session key for multiple [SupplyParameterFromSession] attributes.");
         }
@@ -85,15 +107,15 @@ internal partial class SessionCascadingValueSupplier
             return Task.CompletedTask;
         }
 
-        foreach (var (key, valueGetter) in _valueCallbacks)
+        foreach (var (key, callback) in _valueCallbacks)
         {
             var sessionKey = key.ToLowerInvariant();
             try
             {
-                var value = valueGetter();
+                var value = callback.ValueGetter();
                 if (value is not null)
                 {
-                    var json = JsonSerializer.Serialize(value, value.GetType(), _jsonOptions);
+                    var json = SerializeUsingContext(value, callback.DeclaredType);
                     session.SetString(sessionKey, json);
                 }
                 else
@@ -107,6 +129,39 @@ internal partial class SessionCascadingValueSupplier
             }
         }
         return Task.CompletedTask;
+    }
+
+    private static string SerializeUsingContext(object value, Type declaredType)
+    {
+        var typeInfo = SessionCascadingValueSerializerContext.Default.GetTypeInfo(declaredType);
+        if (typeInfo is not null)
+        {
+            // Use source-generated serialization when the type is registered
+            using var stream = new MemoryStream();
+            using var writer = new Utf8JsonWriter(stream);
+            JsonSerializer.Serialize(writer, value, typeInfo);
+            return Encoding.UTF8.GetString(stream.ToArray());
+        }
+
+        // Fallback for types not in the context - use reflection-based serialization
+        // This should rarely happen in trimming scenarios with properly registered types
+        var options = new JsonSerializerOptions();
+        return JsonSerializer.Serialize(value, declaredType, options);
+    }
+
+    private static object? DeserializeUsingContext(string json, Type declaredType)
+    {
+        var typeInfo = SessionCascadingValueSerializerContext.Default.GetTypeInfo(declaredType);
+        if (typeInfo is not null)
+        {
+            // Use source-generated deserialization when the type is registered
+            var reader = new Utf8JsonReader(Encoding.UTF8.GetBytes(json));
+            return JsonSerializer.Deserialize(ref reader, typeInfo);
+        }
+
+        // Fallback for types not in the context
+        var options = new JsonSerializerOptions();
+        return JsonSerializer.Deserialize(json, declaredType, options);
     }
 
     internal void DeleteValueCallback(string sessionKey)
@@ -164,7 +219,7 @@ internal partial class SessionCascadingValueSupplier
                 {
                     return null;
                 }
-                return JsonSerializer.Deserialize(json, _propertyType, _jsonOptions);
+                return DeserializeUsingContext(json, _propertyType);
             }
             catch (Exception ex)
             {

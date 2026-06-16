@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,17 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace Microsoft.AspNetCore.Components.Endpoints;
+
+[JsonSourceGenerationOptions(
+    WriteIndented = false,
+    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
+    PropertyNameCaseInsensitive = true)]
+[JsonSerializable(typeof(ComponentMarker))]
+[JsonSerializable(typeof(ComponentEndMarker))]
+internal sealed partial class EndpointHtmlRendererJsonContext : JsonSerializerContext
+{
+}
 
 internal partial class EndpointHtmlRenderer
 {
@@ -291,7 +303,14 @@ internal partial class EndpointHtmlRenderer
                 EmitBrowserConfigurationOnce(output);
             }
 
-            var serializedStartRecord = JsonSerializer.Serialize(marker, ServerComponentSerializationSettings.JsonSerializationOptions);
+            var serializationOptions = new JsonSerializerOptions
+            {
+                TypeInfoResolver = EndpointHtmlRendererJsonContext.Default,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                PropertyNameCaseInsensitive = true
+            };
+            var serializedStartRecord = JsonSerializer.Serialize(marker, serializationOptions);
             output.Write("<!--Blazor:");
             output.Write(serializedStartRecord);
             output.Write("-->");
@@ -315,7 +334,14 @@ internal partial class EndpointHtmlRenderer
 
         if (endMarkerOrNull is { } endMarker)
         {
-            var serializedEndRecord = JsonSerializer.Serialize(endMarker, ServerComponentSerializationSettings.JsonSerializationOptions);
+            var serializationOptions = new JsonSerializerOptions
+            {
+                TypeInfoResolver = EndpointHtmlRendererJsonContext.Default,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                PropertyNameCaseInsensitive = true
+            };
+            var serializedEndRecord = JsonSerializer.Serialize(endMarker, serializationOptions);
             output.Write("<!--Blazor:");
             output.Write(serializedEndRecord);
             output.Write("-->");
