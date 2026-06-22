@@ -40,7 +40,6 @@ internal partial class SessionCascadingValueSupplier
 {
     private static readonly ConcurrentDictionary<(Type, string), PropertyGetter> _propertyGetterCache = new();
     private HttpContext? _httpContext;
-    private bool _onStartingRegistered;
     private readonly Dictionary<string, (Func<object?> ValueGetter, Type DeclaredType)> _valueCallbacks = new(StringComparer.OrdinalIgnoreCase);
     private readonly ILogger<SessionCascadingValueSupplier> _logger;
 
@@ -59,10 +58,10 @@ internal partial class SessionCascadingValueSupplier
         SupplyParameterFromSessionAttribute attribute,
         CascadingParameterInfo parameterInfo)
     {
-        if (!_onStartingRegistered && _httpContext is not null)
+        if (_httpContext is not null)
         {
-            _onStartingRegistered = true;
-            _httpContext.Response.OnStarting(PersistAllValues);
+            // Ensure that session cookie is issued to allow for persistence from streaming context
+            SessionEstablishmentHelper.TryRegisterSessionEstablishment(_httpContext);
         }
 
         var sessionKey = attribute.Name ?? parameterInfo.PropertyName;
