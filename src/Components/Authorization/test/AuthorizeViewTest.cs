@@ -496,7 +496,6 @@ public class AuthorizeViewTest
     [Fact]
     public void RendersForbiddenContentForAuthenticatedUnauthorizedUser()
     {
-
         var authorizationService = new TestAuthorizationService
         {
             NextResult = CreateFailedAuthorizationResultWithReason()
@@ -742,6 +741,91 @@ public class AuthorizeViewTest
         Assert.Equal(FailureReasonMessage, capturedReason);
     }
 
+    [Fact]
+    public void ForbiddenCanAccessMultipleAuthorizationFailureReasons()
+    {
+        var firstReason = "Missing permission: Project.Read";
+        var secondReason = "Missing permission: Project.Edit";
+
+        var result = AuthorizationResult.Failed(
+            AuthorizationFailure.Failed(new[]
+            {
+                new AuthorizationFailureReason(new TestFailureReasonHandler(), firstReason),
+                new AuthorizationFailureReason(new TestFailureReasonHandler(), secondReason),
+            }));
+
+        var authorizationService = new TestAuthorizationService
+        {
+            NextResult = result
+        };
+
+        var renderer = CreateTestRenderer(authorizationService);
+
+        string[] capturedReasons = null;
+
+        var rootComponent = WrapInAuthorizeView(
+            forbidden: context => builder =>
+            {
+                capturedReasons = context.AuthorizationResult.Failure
+                    .FailureReasons
+                    .Select(reason => reason.Message)
+                    .ToArray();
+
+                builder.AddContent(0, "Forbidden content");
+            });
+
+        rootComponent.AuthenticationState = Task.FromResult(
+            new AuthenticationState(CreateAuthenticatedUser()));
+
+        renderer.AssignRootComponentId(rootComponent);
+        rootComponent.TriggerRender();
+
+        Assert.Equal(new[] { firstReason, secondReason }, capturedReasons);
+    }
+
+    [Fact]
+    public void RendersAuthorizedContentWhenAuthorizeDataIsNullEvenWhenForbiddenIsSupplied()
+    {
+        var authorizationService = new TestAuthorizationService
+        {
+            NextResult = CreateFailedAuthorizationResultWithReason()
+        };
+
+        var renderer = CreateTestRenderer(authorizationService);
+
+        var renderedAuthorized = false;
+        var renderedNotAuthorized = false;
+        var renderedForbidden = false;
+
+        var rootComponent = WrapInAuthorizeViewCoreWithoutAuthorizeData(
+            childContent: context => builder =>
+            {
+                renderedAuthorized = true;
+                builder.AddContent(0, "Authorized content");
+            },
+            notAuthorized: context => builder =>
+            {
+                renderedNotAuthorized = true;
+                builder.AddContent(0, "NotAuthorized content");
+            },
+            forbidden: context => builder =>
+            {
+                renderedForbidden = true;
+                builder.AddContent(0, "Forbidden content");
+            });
+
+        rootComponent.AuthenticationState = Task.FromResult(
+            new AuthenticationState(CreateAnonymousUser()));
+
+        renderer.AssignRootComponentId(rootComponent);
+        rootComponent.TriggerRender();
+
+        Assert.True(renderedAuthorized);
+        Assert.False(renderedNotAuthorized);
+        Assert.False(renderedForbidden);
+        Assert.Empty(authorizationService.AuthorizeCalls);
+    }
+
     private static TestAuthStateProviderComponent WrapInAuthorizeView(
         RenderFragment<AuthenticationState> childContent = null,
         RenderFragment<AuthenticationState> authorized = null,
@@ -796,6 +880,54 @@ public class AuthorizeViewTest
             if (resource != null)
             {
                 builder.AddComponentParameter(sequence++, nameof(AuthorizeView.Resource), resource);
+            }
+
+            builder.CloseComponent();
+        });
+    }
+
+    private static TestAuthStateProviderComponent WrapInAuthorizeViewCoreWithoutAuthorizeData(
+        RenderFragment<AuthenticationState> childContent = null,
+        RenderFragment<AuthenticationState> authorized = null,
+        RenderFragment<AuthenticationState> notAuthorized = null,
+        RenderFragment authorizing = null,
+        RenderFragment<AuthorizationStateWithResult> forbidden = null,
+        object resource = null)
+    {
+        return new TestAuthStateProviderComponent(builder =>
+        {
+            var sequence = 0;
+
+            builder.OpenComponent<AuthorizeViewCoreWithoutAuthorizeData>(sequence++);
+
+            if (childContent != null)
+            {
+                builder.AddComponentParameter(sequence++, nameof(AuthorizeViewCore.ChildContent), childContent);
+            }
+
+            if (authorized != null)
+            {
+                builder.AddComponentParameter(sequence++, nameof(AuthorizeViewCore.Authorized), authorized);
+            }
+
+            if (notAuthorized != null)
+            {
+                builder.AddComponentParameter(sequence++, nameof(AuthorizeViewCore.NotAuthorized), notAuthorized);
+            }
+
+            if (authorizing != null)
+            {
+                builder.AddComponentParameter(sequence++, nameof(AuthorizeViewCore.Authorizing), authorizing);
+            }
+
+            if (forbidden != null)
+            {
+                builder.AddComponentParameter(sequence++, nameof(AuthorizeViewCore.Forbidden), forbidden);
+            }
+
+            if (resource != null)
+            {
+                builder.AddComponentParameter(sequence++, nameof(AuthorizeViewCore.Resource), resource);
             }
 
             builder.CloseComponent();
@@ -880,6 +1012,12 @@ public class AuthorizeViewTest
             authenticationType: "TestAuth");
 
         return new ClaimsPrincipal(identity);
+    }
+
+    public class AuthorizeViewCoreWithoutAuthorizeData : AuthorizeViewCore
+    {
+        protected override IAuthorizeData[] GetAuthorizeData()
+            => null;
     }
 
     private static AuthorizationResult CreateFailedAuthorizationResultWithReason()
