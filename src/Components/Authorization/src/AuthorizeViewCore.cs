@@ -1,7 +1,6 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Rendering;
 
@@ -13,7 +12,7 @@ namespace Microsoft.AspNetCore.Components.Authorization;
 public abstract class AuthorizeViewCore : ComponentBase
 {
     private AuthenticationState? currentAuthenticationState;
-    private bool? isAuthorized;
+    private AuthorizationResult? currentAuthorizationResult;
 
     /// <summary>
     /// The content that will be displayed if the user is authorized.
@@ -23,6 +22,13 @@ public abstract class AuthorizeViewCore : ComponentBase
     /// <summary>
     /// The content that will be displayed if the user is not authorized.
     /// </summary>
+    /// <remarks>
+    /// This fragment is used when the user is not authenticated. It also serves as
+    /// the fallback for authorization failures when <see cref="Forbidden"/> is not supplied.
+    /// In fallback scenarios, the fragment receives an <see cref="AuthorizationStateWithResult"/>
+    /// instance as the runtime context, allowing callers to access the associated
+    /// <see cref="AuthorizationResult"/> and any authorization failure reasons.
+    /// </remarks>
     [Parameter] public RenderFragment<AuthenticationState>? NotAuthorized { get; set; }
 
     /// <summary>
@@ -37,6 +43,18 @@ public abstract class AuthorizeViewCore : ComponentBase
     [Parameter] public RenderFragment? Authorizing { get; set; }
 
     /// <summary>
+    /// The content that will be displayed if the user is authenticated but not authorized.
+    /// </summary>
+    /// <remarks>
+    /// This fragment represents the logical "forbidden" (HTTP 403) case and receives
+    /// an <see cref="AuthorizationStateWithResult"/> containing the current user and
+    /// the authorization result, including any failure reasons.
+    /// If this parameter is not specified, the component falls back to rendering
+    /// <see cref="NotAuthorized"/>.
+    /// </remarks>
+    [Parameter] public RenderFragment<AuthorizationStateWithResult>? Forbidden { get; set; }
+
+    /// <summary>
     /// The resource to which access is being controlled.
     /// </summary>
     [Parameter] public object? Resource { get; set; }
@@ -47,24 +65,45 @@ public abstract class AuthorizeViewCore : ComponentBase
 
     [Inject] private IAuthorizationService AuthorizationService { get; set; } = default!;
 
+    private static bool ShouldRenderNotAuthorized(AuthenticationState authenticationState)
+    {
+        return authenticationState.User.Identity?.IsAuthenticated != true;
+    }
+
     /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder)
     {
-        // We're using the same sequence number for each of the content items here
-        // so that we can update existing instances if they are the same shape
-        if (isAuthorized == null)
+        var authorized = Authorized ?? ChildContent;
+
+        if (currentAuthorizationResult is null)
         {
             builder.AddContent(0, Authorizing);
+            return;
         }
-        else if (isAuthorized == true)
+
+        if (currentAuthorizationResult.Succeeded)
         {
-            var authorized = Authorized ?? ChildContent;
             builder.AddContent(0, authorized?.Invoke(currentAuthenticationState!));
+            return;
         }
-        else
+
+        var authenticationStateWithResult = new AuthorizationStateWithResult(
+            currentAuthenticationState!.User,
+            currentAuthorizationResult);
+
+        if (ShouldRenderNotAuthorized(currentAuthenticationState))
         {
-            builder.AddContent(0, NotAuthorized?.Invoke(currentAuthenticationState!));
+            builder.AddContent(0, NotAuthorized?.Invoke(authenticationStateWithResult));
+            return;
         }
+
+        if (Forbidden is not null)
+        {
+            builder.AddContent(0, Forbidden.Invoke(authenticationStateWithResult));
+            return;
+        }
+
+        builder.AddContent(0, NotAuthorized?.Invoke(authenticationStateWithResult));
     }
 
     /// <inheritdoc />
@@ -83,35 +122,32 @@ public abstract class AuthorizeViewCore : ComponentBase
             throw new InvalidOperationException($"Authorization requires a cascading parameter of type Task<{nameof(AuthenticationState)}>. Consider using {typeof(CascadingAuthenticationState).Name} to supply this.");
         }
 
-        // Clear the previous result of authorization
-        // This will cause the Authorizing state to be displayed until the authorization has been completed
-        isAuthorized = null;
+        // Clear the previous authorization result so the Authorizing content can be shown
+        // while the new authorization check is being evaluated.
+        currentAuthorizationResult = null;
 
         currentAuthenticationState = await AuthenticationState;
-        isAuthorized = await IsAuthorizedAsync(currentAuthenticationState.User);
+
+        var authorizeData = GetAuthorizeData();
+        if (authorizeData is null)
+        {
+            currentAuthorizationResult = AuthorizationResult.Success();
+            return;
+        }
+
+        EnsureNoAuthenticationSchemeSpecified(authorizeData);
+
+        var policy = await AuthorizationPolicy.CombineAsync(
+            AuthorizationPolicyProvider,
+            authorizeData);
+
+        currentAuthorizationResult = await AuthorizationService.AuthorizeAsync(currentAuthenticationState.User, Resource, policy!);
     }
 
     /// <summary>
     /// Gets the data required to apply authorization rules.
     /// </summary>
     protected abstract IAuthorizeData[]? GetAuthorizeData();
-
-    private async Task<bool> IsAuthorizedAsync(ClaimsPrincipal user)
-    {
-        var authorizeData = GetAuthorizeData();
-        if (authorizeData == null)
-        {
-            // No authorization applies, so no need to consult the authorization service
-            return true;
-        }
-
-        EnsureNoAuthenticationSchemeSpecified(authorizeData);
-
-        var policy = await AuthorizationPolicy.CombineAsync(
-            AuthorizationPolicyProvider, authorizeData);
-        var result = await AuthorizationService.AuthorizeAsync(user, Resource, policy!);
-        return result.Succeeded;
-    }
 
     private static void EnsureNoAuthenticationSchemeSpecified(IAuthorizeData[] authorizeData)
     {

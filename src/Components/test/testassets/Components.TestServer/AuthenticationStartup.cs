@@ -3,7 +3,9 @@
 
 using System.Globalization;
 using System.Net.WebSockets;
+using BasicTestApp.AuthTest;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
 
 namespace TestServer;
@@ -31,8 +33,16 @@ public class AuthenticationStartupBase
         services.AddAuthorization(options =>
         {
             options.AddPolicy("NameMustStartWithB", policy =>
-                policy.RequireAssertion(ctx => ctx.User.Identity.Name?.StartsWith('B') ?? false));
+                policy.RequireAssertion(ctx => ctx.User.Identity?.Name?.StartsWith('B') ?? false));
+
+            options.AddPolicy("ProjectReadWithFailureReason", policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.Requirements.Add(new ProjectPermissionRequirement("Project.Read"));
+            });
         });
+
+        services.AddScoped<IAuthorizationHandler, ProjectPermissionHandler>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

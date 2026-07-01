@@ -1,1 +1,6 @@
 #nullable enable
+Microsoft.AspNetCore.Components.Authorization.AuthorizationStateWithResult
+Microsoft.AspNetCore.Components.Authorization.AuthorizationStateWithResult.AuthorizationResult.get -> Microsoft.AspNetCore.Authorization.AuthorizationResult!
+Microsoft.AspNetCore.Components.Authorization.AuthorizationStateWithResult.AuthorizationStateWithResult(System.Security.Claims.ClaimsPrincipal! user, Microsoft.AspNetCore.Authorization.AuthorizationResult! authorizationResult) -> void
+Microsoft.AspNetCore.Components.Authorization.AuthorizeViewCore.Forbidden.get -> Microsoft.AspNetCore.Components.RenderFragment<Microsoft.AspNetCore.Components.Authorization.AuthorizationStateWithResult!>?
+Microsoft.AspNetCore.Components.Authorization.AuthorizeViewCore.Forbidden.set -> void

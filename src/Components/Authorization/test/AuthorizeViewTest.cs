@@ -493,25 +493,311 @@ public class AuthorizeViewTest
         Assert.Equal("The authorization data specifies an authentication scheme with value 'test scheme'. Authentication schemes cannot be specified for components.", ex.Message);
     }
 
+    [Fact]
+    public void RendersForbiddenContentForAuthenticatedUnauthorizedUser()
+    {
+
+        var authorizationService = new TestAuthorizationService
+        {
+            NextResult = CreateFailedAuthorizationResultWithReason()
+        };
+
+        var renderer = CreateTestRenderer(authorizationService);
+
+        var renderedAuthorized = false;
+        var renderedNotAuthorized = false;
+        var renderedForbidden = false;
+
+        var rootComponent = WrapInAuthorizeView(
+            authorized: context => builder =>
+            {
+                renderedAuthorized = true;
+                builder.AddContent(0, "Authorized content");
+            },
+            notAuthorized: context => builder =>
+            {
+                renderedNotAuthorized = true;
+                builder.AddContent(0, "NotAuthorized content");
+            },
+            forbidden: context => builder =>
+            {
+                renderedForbidden = true;
+                builder.AddContent(0, "Forbidden content");
+            });
+
+        rootComponent.AuthenticationState = Task.FromResult(
+            new AuthenticationState(CreateAuthenticatedUser()));
+
+        renderer.AssignRootComponentId(rootComponent);
+        rootComponent.TriggerRender();
+
+        Assert.False(renderedAuthorized);
+        Assert.False(renderedNotAuthorized);
+        Assert.True(renderedForbidden);
+    }
+
+    [Fact]
+    public void RendersAuthorizedContentWhenAuthorizationSucceedsEvenWhenForbiddenIsSupplied()
+    {
+        var authorizationService = new TestAuthorizationService
+        {
+            NextResult = AuthorizationResult.Success()
+        };
+
+        var renderer = CreateTestRenderer(authorizationService);
+
+        var renderedAuthorized = false;
+        var renderedNotAuthorized = false;
+        var renderedForbidden = false;
+
+        var rootComponent = WrapInAuthorizeView(
+            authorized: context => builder =>
+            {
+                renderedAuthorized = true;
+                builder.AddContent(0, "Authorized content");
+            },
+            notAuthorized: context => builder =>
+            {
+                renderedNotAuthorized = true;
+                builder.AddContent(0, "NotAuthorized content");
+            },
+            forbidden: context => builder =>
+            {
+                renderedForbidden = true;
+                builder.AddContent(0, "Forbidden content");
+            });
+
+        rootComponent.AuthenticationState = Task.FromResult(
+            new AuthenticationState(CreateAuthenticatedUser()));
+
+        renderer.AssignRootComponentId(rootComponent);
+        rootComponent.TriggerRender();
+
+        Assert.True(renderedAuthorized);
+        Assert.False(renderedNotAuthorized);
+        Assert.False(renderedForbidden);
+    }
+
+    [Fact]
+    public void ForbiddenReceivesAuthorizationStateWithResult()
+    {
+        var authorizationService = new TestAuthorizationService
+        {
+            NextResult = CreateFailedAuthorizationResultWithReason()
+        };
+
+        var renderer = CreateTestRenderer(authorizationService);
+
+        AuthorizationStateWithResult capturedContext = null;
+
+        var rootComponent = WrapInAuthorizeView(
+            forbidden: context => builder =>
+            {
+                capturedContext = context;
+                builder.AddContent(0, "Forbidden content");
+            });
+
+        rootComponent.AuthenticationState = Task.FromResult(new AuthenticationState(CreateAuthenticatedUser()));
+
+        renderer.AssignRootComponentId(rootComponent);
+        rootComponent.TriggerRender();
+
+        Assert.NotNull(capturedContext);
+        Assert.Equal("Test user", capturedContext.User.Identity.Name);
+        Assert.False(capturedContext.AuthorizationResult.Succeeded);
+    }
+
+    [Fact]
+    public void RendersNotAuthorizedContentForAnonymousUserEvenWhenForbiddenIsSupplied()
+    {
+        var authorizationService = new TestAuthorizationService
+        {
+            NextResult = CreateFailedAuthorizationResultWithReason()
+        };
+
+        var renderer = CreateTestRenderer(authorizationService);
+
+        var renderedNotAuthorized = false;
+        var renderedForbidden = false;
+
+        var rootComponent = WrapInAuthorizeView(
+            notAuthorized: context => builder =>
+            {
+                renderedNotAuthorized = true;
+                builder.AddContent(0, "NotAuthorized content");
+            },
+            forbidden: context => builder =>
+            {
+                renderedForbidden = true;
+                builder.AddContent(0, "Forbidden content");
+            });
+
+        rootComponent.AuthenticationState = Task.FromResult(new AuthenticationState(CreateAnonymousUser()));
+
+        renderer.AssignRootComponentId(rootComponent);
+        rootComponent.TriggerRender();
+
+        Assert.True(renderedNotAuthorized);
+        Assert.False(renderedForbidden);
+    }
+
+    [Fact]
+    public void ForbiddenCanAccessAuthorizationFailureReason()
+    {
+        var authorizationService = new TestAuthorizationService
+        {
+            NextResult = CreateFailedAuthorizationResultWithReason()
+        };
+
+        var renderer = CreateTestRenderer(authorizationService);
+
+        string capturedReason = null;
+
+        var rootComponent = WrapInAuthorizeView(
+            forbidden: context => builder =>
+            {
+                capturedReason = context.AuthorizationResult.Failure
+                    .FailureReasons
+                    .Single()
+                    .Message;
+
+                builder.AddContent(0, capturedReason);
+            });
+
+        rootComponent.AuthenticationState = Task.FromResult(new AuthenticationState(CreateAuthenticatedUser()));
+
+        renderer.AssignRootComponentId(rootComponent);
+        rootComponent.TriggerRender();
+
+        Assert.Equal(FailureReasonMessage, capturedReason);
+    }
+
+    [Fact]
+    public void FallsBackToNotAuthorizedWhenForbiddenIsNotSupplied()
+    {
+        var authorizationService = new TestAuthorizationService
+        {
+            NextResult = CreateFailedAuthorizationResultWithReason()
+        };
+
+        var renderer = CreateTestRenderer(authorizationService);
+
+        var renderedNotAuthorized = false;
+        AuthenticationState capturedContext = null;
+
+        var rootComponent = WrapInAuthorizeView(
+            notAuthorized: context => builder =>
+            {
+                renderedNotAuthorized = true;
+                capturedContext = context;
+                builder.AddContent(0, "NotAuthorized fallback");
+            });
+
+        rootComponent.AuthenticationState = Task.FromResult(new AuthenticationState(CreateAuthenticatedUser()));
+
+        renderer.AssignRootComponentId(rootComponent);
+        rootComponent.TriggerRender();
+
+        Assert.True(renderedNotAuthorized);
+
+        var authorizationStateWithResult = Assert.IsType<AuthorizationStateWithResult>(capturedContext);
+
+        Assert.Equal("Test user", authorizationStateWithResult.User.Identity.Name);
+        Assert.False(authorizationStateWithResult.AuthorizationResult.Succeeded);
+    }
+
+    [Fact]
+    public void NotAuthorizedFallbackCanAccessAuthorizationFailureReason()
+    {
+        var authorizationService = new TestAuthorizationService
+        {
+            NextResult = CreateFailedAuthorizationResultWithReason()
+        };
+
+        var renderer = CreateTestRenderer(authorizationService);
+
+        string capturedReason = null;
+
+        var rootComponent = WrapInAuthorizeView(
+            notAuthorized: context => builder =>
+            {
+                var authorizationStateWithResult =
+                    Assert.IsType<AuthorizationStateWithResult>(context);
+
+                capturedReason = authorizationStateWithResult.AuthorizationResult
+                    .Failure
+                    .FailureReasons
+                    .Single()
+                    .Message;
+
+                builder.AddContent(0, capturedReason);
+            });
+
+        rootComponent.AuthenticationState = Task.FromResult(
+            new AuthenticationState(CreateAuthenticatedUser()));
+
+        renderer.AssignRootComponentId(rootComponent);
+        rootComponent.TriggerRender();
+
+        Assert.Equal(FailureReasonMessage, capturedReason);
+    }
+
     private static TestAuthStateProviderComponent WrapInAuthorizeView(
         RenderFragment<AuthenticationState> childContent = null,
         RenderFragment<AuthenticationState> authorized = null,
         RenderFragment<AuthenticationState> notAuthorized = null,
         RenderFragment authorizing = null,
+        RenderFragment<AuthorizationStateWithResult> forbidden = null,
         string policy = null,
         string roles = null,
         object resource = null)
     {
         return new TestAuthStateProviderComponent(builder =>
         {
-            builder.OpenComponent<AuthorizeView>(0);
-            builder.AddComponentParameter(1, nameof(AuthorizeView.ChildContent), childContent);
-            builder.AddComponentParameter(2, nameof(AuthorizeView.Authorized), authorized);
-            builder.AddComponentParameter(3, nameof(AuthorizeView.NotAuthorized), notAuthorized);
-            builder.AddComponentParameter(4, nameof(AuthorizeView.Authorizing), authorizing);
-            builder.AddComponentParameter(5, nameof(AuthorizeView.Policy), policy);
-            builder.AddComponentParameter(6, nameof(AuthorizeView.Roles), roles);
-            builder.AddComponentParameter(7, nameof(AuthorizeView.Resource), resource);
+            var sequence = 0;
+
+            builder.OpenComponent<AuthorizeView>(sequence++);
+
+            if (childContent != null)
+            {
+                builder.AddComponentParameter(sequence++, nameof(AuthorizeView.ChildContent), childContent);
+            }
+
+            if (authorized != null)
+            {
+                builder.AddComponentParameter(sequence++, nameof(AuthorizeView.Authorized), authorized);
+            }
+
+            if (notAuthorized != null)
+            {
+                builder.AddComponentParameter(sequence++, nameof(AuthorizeView.NotAuthorized), notAuthorized);
+            }
+
+            if (authorizing != null)
+            {
+                builder.AddComponentParameter(sequence++, nameof(AuthorizeView.Authorizing), authorizing);
+            }
+
+            if (forbidden != null)
+            {
+                builder.AddComponentParameter(sequence++, nameof(AuthorizeViewCore.Forbidden), forbidden);
+            }
+
+            if (policy != null)
+            {
+                builder.AddComponentParameter(sequence++, nameof(AuthorizeView.Policy), policy);
+            }
+
+            if (roles != null)
+            {
+                builder.AddComponentParameter(sequence++, nameof(AuthorizeView.Roles), roles);
+            }
+
+            if (resource != null)
+            {
+                builder.AddComponentParameter(sequence++, nameof(AuthorizeView.Resource), resource);
+            }
+
             builder.CloseComponent();
         });
     }
@@ -561,11 +847,13 @@ public class AuthorizeViewTest
         => Task.FromResult(new AuthenticationState(
             new ClaimsPrincipal(new TestIdentity { Name = username })));
 
-    public TestRenderer CreateTestRenderer(IAuthorizationService authorizationService)
+    public static TestRenderer CreateTestRenderer(IAuthorizationService authorizationService)
     {
         var serviceCollection = new ServiceCollection();
+        serviceCollection.AddSingleton<AuthenticationStateProvider, TestAuthenticationStateProvider>();
+        serviceCollection.AddSingleton<IAuthorizationPolicyProvider, TestAuthorizationPolicyProvider>();
         serviceCollection.AddSingleton(authorizationService);
-        serviceCollection.AddSingleton<IAuthorizationPolicyProvider>(new TestAuthorizationPolicyProvider());
+
         return new TestRenderer(serviceCollection.BuildServiceProvider());
     }
 
@@ -573,5 +861,42 @@ public class AuthorizeViewTest
     {
         protected override IAuthorizeData[] GetAuthorizeData()
             => new[] { new AuthorizeAttribute { AuthenticationSchemes = "test scheme" } };
+    }
+
+    private const string FailureReasonMessage = "Missing permission: Project.Read";
+
+    private static ClaimsPrincipal CreateAnonymousUser()
+    {
+        return new ClaimsPrincipal(new ClaimsIdentity());
+    }
+
+    private static ClaimsPrincipal CreateAuthenticatedUser()
+    {
+        var identity = new ClaimsIdentity(
+            new[]
+            {
+                new Claim(ClaimTypes.Name, "Test user"),
+            },
+            authenticationType: "TestAuth");
+
+        return new ClaimsPrincipal(identity);
+    }
+
+    private static AuthorizationResult CreateFailedAuthorizationResultWithReason()
+    {
+        var reason = new AuthorizationFailureReason(
+            new TestFailureReasonHandler(),
+            FailureReasonMessage);
+
+        return AuthorizationResult.Failed(
+            AuthorizationFailure.Failed(new[] { reason }));
+    }
+
+    private sealed class TestFailureReasonHandler : IAuthorizationHandler
+    {
+        public Task HandleAsync(AuthorizationHandlerContext context)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

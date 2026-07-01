@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web;
 using BasicTestApp.AuthTest;
 using BasicTestApp.PropertyInjection;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -39,9 +40,16 @@ public class Program
         builder.Services.AddAuthorizationCore(options =>
         {
             options.AddPolicy("NameMustStartWithB", policy =>
-                policy.RequireAssertion(ctx => ctx.User.Identity.Name?.StartsWith('B') ?? false));
+                policy.RequireAssertion(ctx => ctx.User.Identity?.Name?.StartsWith('B') ?? false));
+
+            options.AddPolicy("ProjectReadWithFailureReason", policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.Requirements.Add(new ProjectPermissionRequirement("Project.Read"));
+            });
         });
 
+        builder.Services.AddScoped<IAuthorizationHandler, ProjectPermissionHandler>();
         builder.Services.AddScoped<PreserveStateService>();
         builder.Services.AddTransient<FormsTest.ValidationComponentDI.SaladChef>();
 
