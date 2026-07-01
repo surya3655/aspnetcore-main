@@ -827,61 +827,26 @@ public class AuthorizeViewTest
     }
 
     private static TestAuthStateProviderComponent WrapInAuthorizeView(
-        RenderFragment<AuthenticationState> childContent = null,
-        RenderFragment<AuthenticationState> authorized = null,
-        RenderFragment<AuthenticationState> notAuthorized = null,
-        RenderFragment authorizing = null,
-        RenderFragment<AuthorizationStateWithResult> forbidden = null,
-        string policy = null,
-        string roles = null,
-        object resource = null)
+    RenderFragment<AuthenticationState> childContent = null,
+    RenderFragment<AuthenticationState> authorized = null,
+    RenderFragment<AuthenticationState> notAuthorized = null,
+    RenderFragment authorizing = null,
+    RenderFragment<AuthorizationStateWithResult> forbidden = null,
+    string policy = null,
+    string roles = null,
+    object resource = null)
     {
         return new TestAuthStateProviderComponent(builder =>
         {
-            var sequence = 0;
-
-            builder.OpenComponent<AuthorizeView>(sequence++);
-
-            if (childContent != null)
-            {
-                builder.AddComponentParameter(sequence++, nameof(AuthorizeView.ChildContent), childContent);
-            }
-
-            if (authorized != null)
-            {
-                builder.AddComponentParameter(sequence++, nameof(AuthorizeView.Authorized), authorized);
-            }
-
-            if (notAuthorized != null)
-            {
-                builder.AddComponentParameter(sequence++, nameof(AuthorizeView.NotAuthorized), notAuthorized);
-            }
-
-            if (authorizing != null)
-            {
-                builder.AddComponentParameter(sequence++, nameof(AuthorizeView.Authorizing), authorizing);
-            }
-
-            if (forbidden != null)
-            {
-                builder.AddComponentParameter(sequence++, nameof(AuthorizeViewCore.Forbidden), forbidden);
-            }
-
-            if (policy != null)
-            {
-                builder.AddComponentParameter(sequence++, nameof(AuthorizeView.Policy), policy);
-            }
-
-            if (roles != null)
-            {
-                builder.AddComponentParameter(sequence++, nameof(AuthorizeView.Roles), roles);
-            }
-
-            if (resource != null)
-            {
-                builder.AddComponentParameter(sequence++, nameof(AuthorizeView.Resource), resource);
-            }
-
+            builder.OpenComponent<AuthorizeView>(0);
+            builder.AddComponentParameter(1, nameof(AuthorizeView.ChildContent), childContent);
+            builder.AddComponentParameter(2, nameof(AuthorizeView.Authorized), authorized);
+            builder.AddComponentParameter(3, nameof(AuthorizeView.NotAuthorized), notAuthorized);
+            builder.AddComponentParameter(4, nameof(AuthorizeView.Authorizing), authorizing);
+            builder.AddComponentParameter(5, nameof(AuthorizeViewCore.Forbidden), forbidden);
+            builder.AddComponentParameter(6, nameof(AuthorizeView.Policy), policy);
+            builder.AddComponentParameter(7, nameof(AuthorizeView.Roles), roles);
+            builder.AddComponentParameter(8, nameof(AuthorizeView.Resource), resource);
             builder.CloseComponent();
         });
     }
@@ -896,40 +861,13 @@ public class AuthorizeViewTest
     {
         return new TestAuthStateProviderComponent(builder =>
         {
-            var sequence = 0;
-
-            builder.OpenComponent<AuthorizeViewCoreWithoutAuthorizeData>(sequence++);
-
-            if (childContent != null)
-            {
-                builder.AddComponentParameter(sequence++, nameof(AuthorizeViewCore.ChildContent), childContent);
-            }
-
-            if (authorized != null)
-            {
-                builder.AddComponentParameter(sequence++, nameof(AuthorizeViewCore.Authorized), authorized);
-            }
-
-            if (notAuthorized != null)
-            {
-                builder.AddComponentParameter(sequence++, nameof(AuthorizeViewCore.NotAuthorized), notAuthorized);
-            }
-
-            if (authorizing != null)
-            {
-                builder.AddComponentParameter(sequence++, nameof(AuthorizeViewCore.Authorizing), authorizing);
-            }
-
-            if (forbidden != null)
-            {
-                builder.AddComponentParameter(sequence++, nameof(AuthorizeViewCore.Forbidden), forbidden);
-            }
-
-            if (resource != null)
-            {
-                builder.AddComponentParameter(sequence++, nameof(AuthorizeViewCore.Resource), resource);
-            }
-
+            builder.OpenComponent<AuthorizeViewCoreWithoutAuthorizeData>(0);
+            builder.AddComponentParameter(1, nameof(AuthorizeViewCore.ChildContent), childContent);
+            builder.AddComponentParameter(2, nameof(AuthorizeViewCore.Authorized), authorized);
+            builder.AddComponentParameter(3, nameof(AuthorizeViewCore.NotAuthorized), notAuthorized);
+            builder.AddComponentParameter(4, nameof(AuthorizeViewCore.Authorizing), authorizing);
+            builder.AddComponentParameter(5, nameof(AuthorizeViewCore.Forbidden), forbidden);
+            builder.AddComponentParameter(6, nameof(AuthorizeViewCore.Resource), resource);
             builder.CloseComponent();
         });
     }
