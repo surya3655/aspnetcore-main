@@ -236,4 +236,36 @@ public class AuthTest : ServerTestBase<ToggleExecutionModeServerFixture<Program>
 
     private void SignInAs(string userName, string roles, bool useSeparateTab = false) =>
         Browser.SignInAs(new Uri(_serverFixture.RootUri, "/subdir"), userName, roles, useSeparateTab);
+
+    [Fact]
+    public void AuthorizeView_RendersForbiddenWithFailureReason()
+    {
+        // The user must be authenticated so the policy proceeds past
+        // RequireAuthenticatedUser and reaches the ProjectPermissionHandler,
+        // which emits the "Missing permission: Project.Read" failure reason.
+        SignInAs("Mallory", null);
+        MountAndNavigateToAuthTest(AuthorizeViewCases);
+
+        var scenario = Browser.Exists(By.Id("authorize-policy-forbidden"));
+        var forbidden = scenario.FindElement(By.Id("forbidden-content"));
+
+        Assert.Contains("Forbidden:", forbidden.Text);
+        Assert.Contains("Missing permission: Project.Read", forbidden.Text);
+    }
+
+    [Fact]
+    public void AuthorizeView_FallsBackToNotAuthorizedWithFailureReason_WhenForbiddenIsNotProvided()
+    {
+        // The user must be authenticated so the policy proceeds past
+        // RequireAuthenticatedUser and reaches the ProjectPermissionHandler,
+        // which emits the "Missing permission: Project.Read" failure reason.
+        SignInAs("Mallory", null);
+        MountAndNavigateToAuthTest(AuthorizeViewCases);
+
+        var scenario = Browser.Exists(By.Id("authorize-policy-notauthorized-fallback"));
+        var notAuthorized = scenario.FindElement(By.Id("fallback-not-authorized-content"));
+
+        Assert.Contains("NotAuthorized:", notAuthorized.Text);
+        Assert.Contains("Missing permission: Project.Read", notAuthorized.Text);
+    }
 }

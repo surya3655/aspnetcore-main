@@ -48,3 +48,62 @@
         </NotAuthorized>
     </AuthorizeView>
 </div>
+
+<div id="authorize-policy-forbidden">
+    <h3>Scenario: Require policy with Forbidden content</h3>
+
+    <AuthorizeView Policy="ProjectReadWithFailureReason">
+        <Authorizing>
+            <p class="authorizing">Authorizing...</p>
+        </Authorizing>
+
+        <Authorized>
+            <p id="forbidden-authorized-content" class="authorized">
+                Welcome, @context.User.Identity?.Name!
+            </p>
+        </Authorized>
+
+        <NotAuthorized>
+            <p id="forbidden-not-authorized-content" class="not-authorized">
+                You're not authorized, @(context.User.Identity?.Name ?? "anonymous")
+            </p>
+        </NotAuthorized>
+
+        <Forbidden Context="state">
+            <p id="forbidden-content">
+                Forbidden:
+                @(state.AuthorizationResult.Failure?.FailureReasons.FirstOrDefault()?.Message
+                    ?? "Permission check failed.")
+            </p>
+        </Forbidden>
+    </AuthorizeView>
+</div>
+
+<div id="authorize-policy-notauthorized-fallback">
+    <h3>Scenario: Require policy without Forbidden fallback</h3>
+
+    <AuthorizeView Policy="ProjectReadWithFailureReason">
+        <Authorizing>
+            <p class="authorizing">Authorizing...</p>
+        </Authorizing>
+
+        <Authorized>
+            <p id="fallback-authorized-content" class="authorized">
+                Welcome, @context.User.Identity?.Name!
+            </p>
+        </Authorized>
+
+        <NotAuthorized Context="state">
+            @{
+                var authorizationState = state as AuthorizationStateWithResult;
+                var reason = authorizationState?.AuthorizationResult.Failure?
+                    .FailureReasons.FirstOrDefault()?.Message;
+            }
+
+            <p id="fallback-not-authorized-content" class="not-authorized">
+                NotAuthorized:
+                @(reason ?? "Permission check failed.")
+            </p>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
