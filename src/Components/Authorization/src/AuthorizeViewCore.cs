@@ -65,9 +65,9 @@ public abstract class AuthorizeViewCore : ComponentBase
 
     [Inject] private IAuthorizationService AuthorizationService { get; set; } = default!;
 
-    private static bool ShouldRenderNotAuthorized(AuthenticationState authenticationState)
+    private static bool ShouldRenderNotAuthorized(AuthenticationState? authenticationState)
     {
-        return authenticationState.User.Identity?.IsAuthenticated != true;
+        return authenticationState?.User.Identity?.IsAuthenticated != true;
     }
 
     /// <inheritdoc />
@@ -81,29 +81,41 @@ public abstract class AuthorizeViewCore : ComponentBase
             return;
         }
 
+        var authenticationState = currentAuthenticationState!;
+
         if (currentAuthorizationResult.Succeeded)
         {
-            builder.AddContent(0, authorized?.Invoke(currentAuthenticationState!));
+            builder.AddContent(0, authorized?.Invoke(authenticationState));
             return;
         }
 
-        var authenticationStateWithResult = new AuthorizationStateWithResult(
-            currentAuthenticationState!.User,
-            currentAuthorizationResult);
-
-        if (ShouldRenderNotAuthorized(currentAuthenticationState))
+        AuthorizationStateWithResult CreateAuthorizationStateWithResult()
         {
-            builder.AddContent(0, NotAuthorized?.Invoke(authenticationStateWithResult));
+            return new AuthorizationStateWithResult(
+                authenticationState.User,
+                currentAuthorizationResult);
+        }
+
+        if (ShouldRenderNotAuthorized(authenticationState))
+        {
+            if (NotAuthorized is not null)
+            {
+                builder.AddContent(0, NotAuthorized.Invoke(CreateAuthorizationStateWithResult()));
+            }
+
             return;
         }
 
         if (Forbidden is not null)
         {
-            builder.AddContent(0, Forbidden.Invoke(authenticationStateWithResult));
+            builder.AddContent(0, Forbidden.Invoke(CreateAuthorizationStateWithResult()));
             return;
         }
 
-        builder.AddContent(0, NotAuthorized?.Invoke(authenticationStateWithResult));
+        if (NotAuthorized is not null)
+        {
+            builder.AddContent(0, NotAuthorized.Invoke(CreateAuthorizationStateWithResult()));
+        }
     }
 
     /// <inheritdoc />

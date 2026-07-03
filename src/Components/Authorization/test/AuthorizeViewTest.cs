@@ -494,6 +494,80 @@ public class AuthorizeViewTest
     }
 
     [Fact]
+    public async Task ForbiddenNotRenderedWhenAuthorizationCheckInProgress()
+    {
+        var authorizationService = new TestAsyncAuthorizationService();
+        authorizationService.NextResult = CreateFailedAuthorizationResultWithReason();
+        var renderer = CreateTestRenderer(authorizationService);
+        renderer.OnUpdateDisplayComplete = () => { };
+
+        var renderedAuthorizing = false;
+        var renderedNotAuthorized = false;
+        var renderedForbidden = false;
+
+        var rootComponent = WrapInAuthorizeView(
+            authorizing: builder =>
+            {
+                renderedAuthorizing = true;
+                builder.AddContent(0, "Authorizing content");
+            },
+            notAuthorized: context => builder =>
+            {
+                renderedNotAuthorized = true;
+                builder.AddContent(0, "NotAuthorized content");
+            },
+            forbidden: context => builder =>
+            {
+                renderedForbidden = true;
+                builder.AddContent(0, "Forbidden content");
+            });
+
+        var authTcs = new TaskCompletionSource<AuthenticationState>();
+        rootComponent.AuthenticationState = authTcs.Task;
+
+        renderer.AssignRootComponentId(rootComponent);
+        rootComponent.TriggerRender();
+        var batch1 = Assert.Single(renderer.Batches);
+        var authorizeViewComponentId = Assert.Single(batch1.GetComponentFrames<AuthorizeView>()).ComponentId;
+        var diff1 = Assert.Single(batch1.DiffsByComponentId[authorizeViewComponentId]);
+        AssertFrame.Text(
+            batch1.ReferenceFrames[diff1.Edits[0].ReferenceFrameIndex],
+            "Authorizing content");
+
+        Assert.True(renderedAuthorizing);
+        Assert.False(renderedNotAuthorized);
+        Assert.False(renderedForbidden);
+
+        var renderTcs = new TaskCompletionSource();
+        renderer.OnUpdateDisplayComplete = () => renderTcs.SetResult();
+        authTcs.SetResult(await CreateAuthenticationState("Monsieur"));
+        await renderTcs.Task;
+
+        Assert.True(renderedForbidden);
+    }
+
+    [Fact]
+    public void RendersNothingWhenAuthenticatedUnauthorizedAndNoTemplatesSupplied()
+    {
+        var authorizationService = new TestAuthorizationService
+        {
+            NextResult = CreateFailedAuthorizationResultWithReason()
+        };
+
+        var renderer = CreateTestRenderer(authorizationService);
+
+        var rootComponent = WrapInAuthorizeView();
+
+        rootComponent.AuthenticationState = Task.FromResult(new AuthenticationState(CreateAuthenticatedUser()));
+
+        renderer.AssignRootComponentId(rootComponent);
+        rootComponent.TriggerRender();
+
+        var diff = renderer.Batches.Single().GetComponentDiffs<AuthorizeView>().Single();
+        Assert.Empty(diff.Edits);
+    }
+
+    [Fact]
     public void RendersForbiddenContentForAuthenticatedUnauthorizedUser()
     {
         var authorizationService = new TestAuthorizationService
