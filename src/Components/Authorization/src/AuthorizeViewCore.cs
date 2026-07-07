@@ -1,6 +1,7 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Rendering;
 
@@ -25,9 +26,11 @@ public abstract class AuthorizeViewCore : ComponentBase
     /// <remarks>
     /// This fragment is used when the user is not authenticated. It also serves as
     /// the fallback for authorization failures when <see cref="Forbidden"/> is not supplied.
-    /// In fallback scenarios, the fragment receives an <see cref="AuthorizationStateWithResult"/>
-    /// instance as the runtime context, allowing callers to access the associated
-    /// <see cref="AuthorizationResult"/> and any authorization failure reasons.
+    /// For anonymous users, the fragment receives the current <see cref="AuthenticationState"/>.
+    /// In fallback scenarios for authenticated users, the fragment receives an
+    /// <see cref="AuthorizationStateWithResult"/> instance as the runtime context,
+    /// allowing callers to access the associated <see cref="AuthorizationResult"/>
+    /// and any authorization failure reasons.
     /// </remarks>
     [Parameter] public RenderFragment<AuthenticationState>? NotAuthorized { get; set; }
 
@@ -67,7 +70,7 @@ public abstract class AuthorizeViewCore : ComponentBase
 
     private static bool ShouldRenderNotAuthorized(AuthenticationState? authenticationState)
     {
-        return authenticationState?.User.Identity?.IsAuthenticated != true;
+        return authenticationState?.User?.Identities.Any(identity => identity?.IsAuthenticated == true) != true;
     }
 
     /// <inheritdoc />
@@ -100,7 +103,7 @@ public abstract class AuthorizeViewCore : ComponentBase
         {
             if (NotAuthorized is not null)
             {
-                builder.AddContent(0, NotAuthorized.Invoke(CreateAuthorizationStateWithResult()));
+                builder.AddContent(0, NotAuthorized.Invoke(authenticationState));
             }
 
             return;

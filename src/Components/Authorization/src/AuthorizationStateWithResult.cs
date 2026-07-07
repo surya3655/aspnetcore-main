@@ -15,7 +15,7 @@ namespace Microsoft.AspNetCore.Components.Authorization;
 /// results, including failure reasons, while preserving the existing
 /// <see cref="AuthenticationState"/>-based template model.
 /// </remarks>
-public sealed class AuthorizationStateWithResult : AuthenticationState
+public class AuthorizationStateWithResult : AuthenticationState
 {
     /// <summary>
     /// Gets the authorization result associated with the current user.
@@ -40,6 +40,8 @@ public sealed class AuthorizationStateWithResult : AuthenticationState
         AuthorizationResult authorizationResult)
         : base(user)
     {
+        ArgumentNullException.ThrowIfNull(authorizationResult);
+
         AuthorizationResult = authorizationResult;
     }
 }
