@@ -3,7 +3,6 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Mime;
 using System.Reflection;
@@ -19,7 +18,7 @@ namespace Microsoft.AspNetCore.Http.Validation;
 internal static class ValidationEndpointFilterFactory
 {
     // A small struct to hold the validatable parameter details to avoid allocating arrays for parameters that don't need validation
-    private readonly record struct ValidatableParameterEntry(int Index, IValidatableParameterInfo Parameter, string Name, ParameterValidationTarget ValidationTarget);
+    private readonly record struct ValidatableParameterEntry(int Index, IValidatableParameterInfo Parameter, ParameterValidationTarget ValidationTarget);
 
     public static EndpointFilterDelegate Create(EndpointFilterFactoryContext context, EndpointFilterDelegate next)
     {
@@ -48,8 +47,7 @@ internal static class ValidationEndpointFilterFactory
                 validatableParameters.Add(new ValidatableParameterEntry(
                 i,
                 validatableParameter,
-                parameters[i].Name!,
-                new ParameterValidationTarget(parameters[i].Name!, parameters[i].ParameterType)));
+                  new ParameterValidationTarget(parameters[i].Name!, parameters[i].ParameterType)));
             }
         }
 
@@ -70,20 +68,14 @@ internal static class ValidationEndpointFilterFactory
                 }
 
                 var argument = context.Arguments[entry.Index];
+
                 var validationContext = CreateValidationContext(context.HttpContext, entry, argument);
 
-                if (validateContext == null)
+                validateContext ??= new ValidateContext
                 {
-                    validateContext = new ValidateContext
-                    {
-                        ValidationOptions = options,
-                        ValidationContext = validationContext,
-                    };
-                }
-                else
-                {
-                    validateContext.ValidationContext = validationContext;
-                }
+                    ValidationOptions = options,
+                    ServiceProvider = context.HttpContext.RequestServices,
+                };
 
                 await entry.Parameter.ValidateAsync(argument, validateContext, context.HttpContext.RequestAborted);
             }
@@ -94,7 +86,7 @@ internal static class ValidationEndpointFilterFactory
 
                 var validationErrors = validateContext.ValidationErrors.ToDictionary(
                     keySelector: kvp => kvp.Key,
-                    elementSelector: kvp => kvp.Value.ToArray());
+                    elementSelector: kvp => kvp.Value.Select(e => e.ErrorMessage).ToArray());
                 var problemDetails = new HttpValidationProblemDetails(validationErrors)
                 {
                     Status = StatusCodes.Status400BadRequest
