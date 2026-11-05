@@ -216,7 +216,7 @@ public partial class QuickGrid<TGridItem> : IAsyncDisposable
     // If the PaginationState mutates, it raises this event. We use it to trigger a re-render.
     private readonly EventCallbackSubscriber<PaginationState> _currentPageItemsChanged;
 
-    // If the QuickGrid is disposed while the JS module is being loaded, we need to avoid calling JS methods
+    // Tracks disposal while the JS module is loading or initializing.
     private bool _wasDisposed;
 
     private bool _firstRefreshDataAsync = true;
@@ -319,6 +319,12 @@ public partial class QuickGrid<TGridItem> : IAsyncDisposable
                 return;
             }
             _jsEventDisposable = await _jsModule.InvokeAsync<IJSObjectReference>("init", _tableReference);
+            if (_wasDisposed)
+            {
+                // Disposed while init was pending, so DisposeAsync could not call stop yet.
+                await DisposeAsync();
+                return;
+            }
         }
 
         if (_checkColumnOptionsPosition && _displayOptionsForColumn is not null)

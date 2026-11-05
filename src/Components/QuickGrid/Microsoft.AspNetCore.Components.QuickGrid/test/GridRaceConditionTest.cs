@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Components.QuickGrid;
 using Microsoft.AspNetCore.Components.Test.Helpers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
+using Microsoft.JSInterop.Infrastructure;
+using Moq;
 using Xunit.Sdk;
 using Microsoft.AspNetCore.Components.Routing;
 
@@ -13,6 +15,44 @@ namespace Microsoft.AspNetCore.Components.QuickGrid.Tests;
 
 public class GridRaceConditionTest
 {
+
+    [Fact]
+    public async Task DisposesEventReferenceWhenDisposedDuringInit()
+    {
+        var initStarted = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var initCompletion = new TaskCompletionSource<IJSObjectReference>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var eventReference = new Mock<IJSObjectReference>(MockBehavior.Strict);
+        eventReference.Setup(reference => reference.InvokeAsync<IJSVoidResult>("stop", It.IsAny<object[]>()))
+            .Returns(new ValueTask<IJSVoidResult>(Mock.Of<IJSVoidResult>()));
+        eventReference.Setup(reference => reference.DisposeAsync()).Returns(ValueTask.CompletedTask);
+        var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+        module.Setup(reference => reference.InvokeAsync<IJSObjectReference>("init", It.IsAny<object[]>()))
+            .Callback(() => initStarted.SetResult())
+            .Returns(() => new ValueTask<IJSObjectReference>(initCompletion.Task));
+        module.Setup(reference => reference.DisposeAsync()).Returns(ValueTask.CompletedTask);
+        var jsRuntime = new Mock<IJSRuntime>(MockBehavior.Strict);
+        jsRuntime.Setup(runtime => runtime.InvokeAsync<IJSObjectReference>("import", It.IsAny<object[]>()))
+            .Returns(new ValueTask<IJSObjectReference>(module.Object));
+        var serviceProvider = new ServiceCollection()
+            .AddSingleton(jsRuntime.Object)
+            .AddSingleton<NavigationManager, TestNavigationManager>()
+            .BuildServiceProvider();
+        var renderer = new TestRenderer(serviceProvider);
+        var testComponent = new SimpleTestComponent();
+
+        var componentId = renderer.AssignRootComponentId(testComponent);
+        renderer.RenderRootComponent(componentId);
+        await initStarted.Task;
+        await renderer.DisposeAsync();
+
+        eventReference.Verify(reference => reference.InvokeAsync<IJSVoidResult>("stop", It.IsAny<object[]>()), Times.Never);
+        eventReference.Verify(reference => reference.DisposeAsync(), Times.Never);
+        initCompletion.SetResult(eventReference.Object);
+        await testComponent.NotFailingGrid.OnAfterRenderCompleted;
+
+        eventReference.Verify(reference => reference.InvokeAsync<IJSVoidResult>("stop", It.IsAny<object[]>()), Times.Once);
+        eventReference.Verify(reference => reference.DisposeAsync(), Times.Once);
+    }
 
     [Fact]
     public async Task CanCorrectlyDisposeAsync()

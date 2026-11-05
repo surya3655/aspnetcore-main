@@ -1,0 +1,35 @@
+@page "/quickgrid-disposal"
+@rendermode RenderMode.InteractiveServer
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
+<h3 id="disposal-ready">QuickGrid disposal</h3>
+@if (ready)
+{
+    <button id="show-grid" @onclick="() => showGrid = true">Show grid</button>
+    <button id="remove-grid" @onclick="() => showGrid = false">Remove grid</button>
+}
+@if (showGrid)
+{
+    <DisposalTrackingQuickGrid Items="people">
+        <PropertyColumn TGridItem="string" TProp="string" Property="p => p" />
+    </DisposalTrackingQuickGrid>
+}
+
+@code {
+    private readonly IQueryable<string> people = new[] { "Ann", "Bob" }.AsQueryable();
+    private bool showGrid;
+    private bool ready;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await using var module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/quickgrid-disposal.js");
+            await module.InvokeVoidAsync("setup");
+            ready = true;
+            StateHasChanged();
+        }
+    }
+}
