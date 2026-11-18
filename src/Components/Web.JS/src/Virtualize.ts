@@ -133,7 +133,8 @@ function init(dotNetHelper: DotNet.DotNetObject, spacerBefore: HTMLElement, spac
   function applyLayoutAttrsBetweenSpacers(records?: MutationRecord[]): void {
     // Only the mutation that supplies a new estimate pair owns the correction.
     const recalibration = records?.some(record => record.target === spacerBefore && record.attributeName === scrollRecalibrationAttr)
-    ? spacerBefore.getAttribute('data-blazor-virtualize-scroll-recalibration-disabled')      : null;
+      ? spacerBefore.getAttribute(scrollRecalibrationAttr)
+      : null;
     const scrollTop = recalibration ? scrollElement.scrollTop : 0;
     for (let el: Element | null = spacerBefore;
          el && el !== spacerAfter.nextElementSibling;
