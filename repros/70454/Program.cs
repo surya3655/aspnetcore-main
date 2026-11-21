@@ -1,6 +1,9 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Http.Metadata;
+using Microsoft.AspNetCore.Routing;
 
+Console.WriteLine($"DISPATCH ASSEMBLY: {typeof(RequestDelegateFactory).Assembly.Location}");
 var app = WebApplication.Create(args);
 app.Urls.Add("http://127.0.0.1:0");
 
@@ -15,6 +18,26 @@ app.MapGet("/results/{ok:bool}", Results<Ok<UserDto>, ProblemHttpResult> (bool o
 await app.StartAsync();
 try
 {
+    var expectFixed = args.Contains("--expect-fixed");
+    if (expectFixed)
+    {
+        var endpoint = ((IEndpointRouteBuilder)app).DataSources.SelectMany(source => source.Endpoints)
+            .OfType<RouteEndpoint>().Single(endpoint => endpoint.RoutePattern.RawText == "/union/{ok:bool}");
+        var metadata = endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().ToArray();
+        if (metadata.Length != 1 || metadata[0].StatusCode != 200 || metadata[0].Type != typeof(UserDto))
+        {
+            throw new InvalidOperationException("Union case metadata does not match Results<>.");
+        }
+
+        Console.WriteLine("VERIFIED METADATA: 200 response describes UserDto, not the union wrapper.");
+    }
+
+    if (args.Contains("--serve"))
+    {
+        await app.WaitForShutdownAsync();
+        return;
+    }
+
     using var client = new HttpClient { BaseAddress = new Uri(app.Urls.Single()) };
     foreach (var path in new[] { "/results/false", "/union/false", "/results/true", "/union/true" })
     {
@@ -24,7 +47,8 @@ try
         Console.WriteLine($"OBSERVED {path}: {(int)response.StatusCode} {mediaType} {body}");
         using var json = JsonDocument.Parse(body);
         var root = json.RootElement;
-        var matches = path switch
+        var assertionPath = expectFixed ? path.Replace("/union/", "/results/", StringComparison.Ordinal) : path;
+        var matches = assertionPath switch
         {
             "/results/false" => (int)response.StatusCode == 404
                 && mediaType == "application/problem+json"
@@ -51,7 +75,9 @@ try
         }
     }
 
-    Console.WriteLine("REPRODUCED: all four HTTP responses match issue #70454.");
+    Console.WriteLine(expectFixed
+        ? "VERIFIED: union responses match Results<> for all four HTTP requests."
+        : "REPRODUCED: all four HTTP responses match issue #70454.");
 }
 finally
 {

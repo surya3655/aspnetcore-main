@@ -412,7 +412,7 @@ public static partial class RequestDelegateFactory
             PopulateBuiltInResponseTypeMetadata(methodInfo.ReturnType, factoryContext);
 
             // Add metadata provided by the delegate return type and parameter types next, this will be more specific than inferred metadata from above
-            EndpointMetadataPopulator.PopulateMetadata(methodInfo, factoryContext.EndpointBuilder, factoryContext.Parameters);
+            EndpointMetadataPopulator.PopulateMetadata(methodInfo, factoryContext.EndpointBuilder, factoryContext.Parameters, populateUnionCaseMetadata: true);
         }
 
         return args;
@@ -1044,7 +1044,10 @@ public static partial class RequestDelegateFactory
         }
 
         // Skip void returns and IResults. IResults might implement IEndpointMetadataProvider but otherwise we don't know what it might do.
-        if (returnType == typeof(void) || typeof(IResult).IsAssignableFrom(returnType))
+        // All-result unions also get metadata from their cases instead of an inferred JSON response.
+        if (returnType == typeof(void) ||
+            typeof(IResult).IsAssignableFrom(returnType) ||
+            EndpointMetadataPopulator.TryGetUnionResultCaseTypes(returnType, out _))
         {
             return;
         }
@@ -2688,7 +2691,14 @@ public static partial class RequestDelegateFactory
     // This method will not check for polymorphism and will
     // leverage the STJ polymorphism support.
     private static Task WriteJsonResponseFast<T>(HttpResponse response, T value, JsonTypeInfo<T> jsonTypeInfo)
-        => HttpResponseJsonExtensions.WriteAsJsonAsync(response, value, jsonTypeInfo, default);
+    {
+        if (value is IUnion { Value: IResult result })
+        {
+            return result.ExecuteAsync(response.HttpContext);
+        }
+
+        return HttpResponseJsonExtensions.WriteAsJsonAsync(response, value, jsonTypeInfo, default);
+    }
 
     private static Task WriteJsonResponse<T>(HttpResponse response, T? value, JsonTypeInfo<T> jsonTypeInfo)
     {

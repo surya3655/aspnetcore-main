@@ -202,6 +202,11 @@ namespace Microsoft.AspNetCore.Http.Generated
         [UnconditionalSuppressMessage("AOT", "IL3050:RequiresDynamicCode", Justification = "See above.")]
         private static Task WriteJsonResponseAsync<T>(HttpResponse response, T? value, JsonTypeInfo<T?> jsonTypeInfo)
         {
+            if (value is global::System.Runtime.CompilerServices.IUnion { Value: IResult result })
+            {
+                return result.ExecuteAsync(response.HttpContext);
+            }
+
             var runtimeType = value?.GetType();
 
             if (jsonTypeInfo.ShouldUseWith(runtimeType))

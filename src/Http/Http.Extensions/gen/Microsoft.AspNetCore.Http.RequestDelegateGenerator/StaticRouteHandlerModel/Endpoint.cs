@@ -36,13 +36,13 @@ internal class Endpoint
         Response.EmitRequiredDiagnostics(Diagnostics, Operation.Syntax.GetLocation());
         IsAwaitable = Response?.IsAwaitable == true;
 
-        EmitterContext.HasResponseMetadata = Response is { } response && !(response.IsIResult || response.HasNoResponse);
+        EmitterContext.HasResponseMetadata = Response is { } response && !(response.IsIResult || response.HasNoResponse || response.IsUnionResult);
 
         // NOTE: We set this twice. It is possible that we don't have any parameters so we
         //       want this to be true if the response type implements IEndpointMetadataProvider.
         //       Later on we set this to be true if the parameters or the response type
         //       implement the interface.
-        EmitterContext.HasEndpointMetadataProvider = Response!.IsEndpointMetadataProvider;
+        EmitterContext.HasEndpointMetadataProvider = Response!.IsEndpointMetadataProvider || Response.UnionResultCaseMetadataProviderTypes is { Count: > 0 };
 
         if (method.Parameters.Length == 0)
         {

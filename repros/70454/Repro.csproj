@@ -12,5 +12,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>
+  <ItemGroup Condition="'$(UseRepositoryAssembly)' == 'true'">
+    <Reference Include="Microsoft.AspNetCore.Http.Extensions">
+      <HintPath>../../artifacts/bin/Microsoft.AspNetCore.Http.Extensions/Debug/net12.0/Microsoft.AspNetCore.Http.Extensions.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+  <PropertyGroup Condition="'$(UseRepositoryGenerator)' == 'true'">
+    <InterceptorsNamespaces>$(InterceptorsNamespaces);Microsoft.AspNetCore.Http.Generated</InterceptorsNamespaces>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(UseRepositoryGenerator)' == 'true'">
+    <Analyzer Include="../../artifacts/bin/Microsoft.AspNetCore.Http.RequestDelegateGenerator/Debug/netstandard2.0/Microsoft.AspNetCore.Http.RequestDelegateGenerator.dll" />
+  </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk.Web" />
 </Project>

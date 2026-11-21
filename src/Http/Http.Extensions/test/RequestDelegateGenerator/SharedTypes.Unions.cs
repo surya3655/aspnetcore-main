@@ -4,6 +4,7 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Microsoft.AspNetCore.Http.Generators.Tests;
@@ -308,3 +309,7 @@ public record UnionAsParametersList(HttpContext HttpContext, [FromRoute] int Ten
 // [AsParameters] container — the bare UnionIntString variant is ambiguous on the String
 // token under web defaults, so we need a classifier to cover the string-case path.
 public record UnionWithClassifierAsParametersList(HttpContext HttpContext, [FromRoute] int TenantId, UnionIntStringWithClassifier Payload);
+
+public union UnionTodoResult(Ok<Todo>, ProblemHttpResult);
+public union UnionTodoStatusResult(Ok<Todo>, NotFound<Todo>);
+public union UnionResultOrData(Ok<Todo>, string);
