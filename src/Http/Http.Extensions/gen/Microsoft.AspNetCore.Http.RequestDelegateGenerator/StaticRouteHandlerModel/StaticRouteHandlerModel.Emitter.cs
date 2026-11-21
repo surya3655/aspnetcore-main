@@ -205,7 +205,7 @@ internal static class StaticRouteHandlerModelEmitter
             return;
         }
 
-        if (response.HasNoResponse || response.IsIResult)
+        if (response.HasNoResponse || response.IsIResult || response.IsUnionResult)
         {
             return;
         }
@@ -232,6 +232,15 @@ internal static class StaticRouteHandlerModelEmitter
         if (response.IsEndpointMetadataProvider)
         {
             codeWriter.WriteLine($"PopulateMetadataForEndpoint<{responseType.ToDisplayString(EmitterConstants.DisplayFormat)}>(methodInfo, options.EndpointBuilder);");
+        }
+        else if (response.IsUnionResult && response.UnionResultCaseMetadataProviderTypes is { Count: > 0 } unionCaseTypes)
+        {
+            // All-result union without its own IEndpointMetadataProvider: each case type's
+            // provider runs, mirroring EndpointMetadataPopulator.PopulateMetadata.
+            foreach (var caseType in unionCaseTypes)
+            {
+                codeWriter.WriteLine($"PopulateMetadataForEndpoint<{caseType.ToDisplayString(EmitterConstants.DisplayFormat)}>(methodInfo, options.EndpointBuilder);");
+            }
         }
     }
     private static void EmitCallsToMetadataProvidersForParameters(this Endpoint endpoint, CodeWriter codeWriter)

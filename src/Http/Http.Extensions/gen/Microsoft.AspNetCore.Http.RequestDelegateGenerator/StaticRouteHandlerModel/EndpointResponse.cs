@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Analyzers.RouteEmbeddedLanguage.Infrastructure;
 using Microsoft.AspNetCore.App.Analyzers.Infrastructure;
 using Microsoft.AspNetCore.Http.RequestDelegateGenerator.StaticRouteHandlerModel.Emitters;
@@ -22,6 +24,9 @@ internal class EndpointResponse
     public bool IsIResult { get; set; }
     public bool IsSerializable { get; set; }
     public bool IsEndpointMetadataProvider { get; set; }
+    public bool IsUnion { get; set; }
+    public bool IsUnionResult { get; set; }
+    public List<ITypeSymbol>? UnionResultCaseMetadataProviderTypes { get; set; }
     private WellKnownTypes WellKnownTypes { get; init; }
 
     internal EndpointResponse(IMethodSymbol method, WellKnownTypes wellKnownTypes)
@@ -36,6 +41,57 @@ internal class EndpointResponse
         IsSerializable = GetIsSerializable();
         ContentType = GetContentType();
         IsEndpointMetadataProvider = ImplementsIEndpointMetadataProvider(ResponseType, wellKnownTypes);
+        IsUnion = GetUnionType() is { } unionType &&
+            unionType.Implements(WellKnownTypes.GetOptional(WellKnownType.System_Runtime_CompilerServices_IUnion));
+        IsUnionResult = TryGetUnionResultCaseMetadataProviderTypes(out var unionCaseTypes);
+        UnionResultCaseMetadataProviderTypes = unionCaseTypes;
+    }
+
+    private INamedTypeSymbol? GetUnionType()
+    {
+        var responseType = ResponseType as INamedTypeSymbol;
+        return responseType?.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T
+            ? responseType.TypeArguments[0] as INamedTypeSymbol
+            : responseType;
+    }
+
+    private bool TryGetUnionResultCaseMetadataProviderTypes(out List<ITypeSymbol>? caseMetadataProviderTypes)
+    {
+        caseMetadataProviderTypes = null;
+        var responseType = GetUnionType();
+        if (!IsUnion || responseType is null ||
+            !responseType.HasAttribute(WellKnownTypes.GetOptional(WellKnownType.System_Runtime_CompilerServices_UnionAttribute)))
+        {
+            return false;
+        }
+
+        var resultType = WellKnownTypes.Get(WellKnownType.Microsoft_AspNetCore_Http_IResult);
+        var caseTypes = new List<ITypeSymbol>();
+        // Match the public case constructors used by runtime metadata discovery.
+        foreach (var constructor in responseType.InstanceConstructors)
+        {
+            if (constructor.DeclaredAccessibility != Accessibility.Public || constructor.Parameters.Length != 1)
+            {
+                continue;
+            }
+
+            var caseType = constructor.Parameters[0].Type;
+            if (!caseType.Implements(resultType) && !SymbolEqualityComparer.Default.Equals(caseType, resultType))
+            {
+                return false;
+            }
+
+            caseTypes.Add(caseType);
+        }
+
+        if (caseTypes.Count == 0)
+        {
+            return false;
+        }
+
+        var metadataProviderType = WellKnownTypes.Get(WellKnownType.Microsoft_AspNetCore_Http_Metadata_IEndpointMetadataProvider);
+        caseMetadataProviderTypes = caseTypes.Where(caseType => caseType.Implements(metadataProviderType)).ToList();
+        return true;
     }
 
     private static bool ImplementsIEndpointMetadataProvider(ITypeSymbol? responseType, WellKnownTypes wellKnownTypes)
@@ -108,9 +164,10 @@ internal class EndpointResponse
             otherEndpointResponse.IsAwaitable == IsAwaitable &&
             otherEndpointResponse.HasNoResponse == HasNoResponse &&
             otherEndpointResponse.IsIResult == IsIResult &&
+            otherEndpointResponse.IsUnionResult == IsUnionResult &&
             string.Equals(otherEndpointResponse.ContentType, ContentType, StringComparison.OrdinalIgnoreCase);
     }
 
     public override int GetHashCode() =>
-        HashCode.Combine(SymbolEqualityComparer.Default.GetHashCode(ResponseType), SymbolEqualityComparer.Default.GetHashCode(WrappedResponseType), WrappedResponseTypeDisplayName, IsAwaitable, HasNoResponse, IsIResult, ContentType);
+        HashCode.Combine(SymbolEqualityComparer.Default.GetHashCode(ResponseType), SymbolEqualityComparer.Default.GetHashCode(WrappedResponseType), WrappedResponseTypeDisplayName, IsAwaitable, HasNoResponse, IsIResult, IsUnionResult, ContentType);
 }

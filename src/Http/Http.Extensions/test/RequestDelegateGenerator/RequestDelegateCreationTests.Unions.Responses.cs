@@ -3,6 +3,7 @@
 
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
+using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -434,5 +435,194 @@ public abstract partial class RequestDelegateCreationTests : RequestDelegateCrea
         Assert.Contains("\"correlation_id\": \"abc\"", body);
         Assert.Contains("\"payload\": 42", body);
         Assert.Contains("\n", body);
+    }
+
+    [Theory]
+    [InlineData("sync", true)]
+    [InlineData("sync", false)]
+    [InlineData("task", true)]
+    [InlineData("task", false)]
+    [InlineData("valuetask", true)]
+    [InlineData("valuetask", false)]
+    [InlineData("async-task", true)]
+    [InlineData("async-task", false)]
+    [InlineData("async-valuetask", true)]
+    [InlineData("async-valuetask", false)]
+    [InlineData("nullable", true)]
+    [InlineData("nullable", false)]
+    [InlineData("object", true)]
+    [InlineData("object", false)]
+    [InlineData("filter", true)]
+    [InlineData("filter", false)]
+    [InlineData("async-filter", true)]
+    [InlineData("async-filter", false)]
+    public async Task MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(string returnStyle, bool ok)
+    {
+        var handler = returnStyle switch
+        {
+            "sync" or "filter" => "(bool ok) => CreateResult(ok)",
+            "task" => "(bool ok) => Task.FromResult(CreateResult(ok))",
+            "valuetask" => "(bool ok) => ValueTask.FromResult(CreateResult(ok))",
+            "async-task" or "async-filter" => "async Task<UnionTodoResult> (bool ok) => { await Task.Yield(); return CreateResult(ok); }",
+            "async-valuetask" => "async ValueTask<UnionTodoResult> (bool ok) => { await Task.Yield(); return CreateResult(ok); }",
+            "nullable" => "(bool ok) => (UnionTodoResult?)CreateResult(ok)",
+            "object" => "(bool ok) => (object)CreateResult(ok)",
+            _ => throw new InvalidOperationException(returnStyle)
+        };
+        var filter = returnStyle is "filter" or "async-filter" ? """
+            .AddEndpointFilter(async (context, next) =>
+            {
+                var result = await next(context);
+                context.HttpContext.Items["sawUnion"] = result is System.Runtime.CompilerServices.IUnion;
+                return result;
+            })
+            """ : "";
+        var source = $$"""
+            static UnionTodoResult CreateResult(bool ok) => ok
+                ? TypedResults.Ok(new Todo { Id = 1, Name = "ann", IsComplete = false })
+                : TypedResults.Problem(statusCode: 404);
+            app.MapGet("/result", {{handler}}){{filter}};
+            """;
+        var (_, compilation) = await RunGeneratorAsync(source);
+        var endpoint = GetEndpointFromCompilation(compilation);
+        var context = CreateHttpContext();
+        context.Request.QueryString = new QueryString($"?ok={ok}");
+
+        await endpoint.RequestDelegate(context);
+
+        Assert.Equal(ok ? 200 : 404, context.Response.StatusCode);
+        var body = await GetResponseBodyAsync(context);
+        if (ok)
+        {
+            Assert.Equal("application/json; charset=utf-8", context.Response.ContentType);
+            Assert.Equal("{\"id\":1,\"name\":\"ann\",\"isComplete\":false}", body);
+        }
+        else
+        {
+            Assert.Equal("application/problem+json", context.Response.ContentType);
+            using var json = JsonDocument.Parse(body);
+            Assert.Equal(404, json.RootElement.GetProperty("status").GetInt32());
+            Assert.Equal("Not Found", json.RootElement.GetProperty("title").GetString());
+            Assert.False(json.RootElement.TryGetProperty("problemDetails", out _));
+        }
+
+        if (returnStyle is "filter" or "async-filter")
+        {
+            Assert.Equal(true, context.Items["sawUnion"]);
+        }
+    }
+
+    [Theory]
+    [InlineData("sync")]
+    [InlineData("task")]
+    [InlineData("valuetask")]
+    [InlineData("nullable")]
+    public async Task MapAction_ReturnsUnionOfIResultCases_HasPerCaseMetadata(string returnStyle)
+    {
+        const string value = "new UnionTodoStatusResult(TypedResults.Ok(new Todo()))";
+        var handler = returnStyle switch
+        {
+            "sync" => $"() => {value}",
+            "task" => $"() => Task.FromResult({value})",
+            "valuetask" => $"() => ValueTask.FromResult({value})",
+            "nullable" => $"() => (UnionTodoStatusResult?){value}",
+            _ => throw new InvalidOperationException(returnStyle)
+        };
+        var (_, compilation) = await RunGeneratorAsync($"app.MapGet(\"/metadata\", {handler});");
+        var endpoint = GetEndpointFromCompilation(compilation);
+        var metadata = endpoint.Metadata.OfType<IProducesResponseTypeMetadata>().OrderBy(m => m.StatusCode).ToArray();
+
+        Assert.Collection(metadata,
+            ok =>
+            {
+                Assert.Equal(200, ok.StatusCode);
+                Assert.Equal(typeof(Todo), ok.Type);
+                Assert.Equal(new[] { "application/json" }, ok.ContentTypes);
+            },
+            notFound =>
+            {
+                Assert.Equal(404, notFound.StatusCode);
+                Assert.Equal(typeof(Todo), notFound.Type);
+                Assert.Equal(new[] { "application/json" }, notFound.ContentTypes);
+            });
+    }
+
+    [Theory]
+    [InlineData("/nullable")]
+    [InlineData("/default")]
+    public async Task MapAction_ReturnsUnionOfIResultCases_PreservesNullSerialization(string route)
+    {
+        var source = """
+            app.MapGet("/nullable", () => (UnionTodoResult?)null);
+            app.MapGet("/default", () => default(UnionTodoResult));
+            """;
+        var (_, compilation) = await RunGeneratorAsync(source);
+        var endpoint = GetEndpointsFromCompilation(compilation).OfType<RouteEndpoint>().Single(e => e.RoutePattern.RawText == route);
+        var context = CreateHttpContext();
+
+        await endpoint.RequestDelegate(context);
+
+        Assert.Equal(200, context.Response.StatusCode);
+        await VerifyResponseBodyAsync(context, "null");
+    }
+
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task MapAction_ReturnsMixedResultUnion_PreservesDataSerialization(bool resultCase)
+    {
+        var source = """
+            app.MapGet("/mixed", (bool resultCase) => resultCase
+                ? new UnionResultOrData(TypedResults.Ok(new Todo { Id = 1, Name = "ann", IsComplete = false }))
+                : new UnionResultOrData("plain"));
+            """;
+        var (_, compilation) = await RunGeneratorAsync(source);
+        var endpoint = GetEndpointFromCompilation(compilation);
+        var context = CreateHttpContext();
+        context.Request.QueryString = new QueryString($"?resultCase={resultCase}");
+
+        await endpoint.RequestDelegate(context);
+
+        Assert.Equal(200, context.Response.StatusCode);
+        await VerifyResponseBodyAsync(context, resultCase ? "{\"id\":1,\"name\":\"ann\",\"isComplete\":false}" : "\"plain\"");
+        Assert.Equal(typeof(UnionResultOrData), Assert.Single(endpoint.Metadata.OfType<IProducesResponseTypeMetadata>()).Type);
+    }
+
+    [Fact]
+    public async Task MapAction_ReturnsUnionOfIResultCases_FilterCanReplaceResult()
+    {
+        var source = """
+            app.MapGet("/replace", () => new UnionTodoResult(TypedResults.Problem(statusCode: 404)))
+                .AddEndpointFilter(async (context, next) =>
+                {
+                    await next(context);
+                    return TypedResults.Text("replaced", "text/plain", statusCode: 409);
+                });
+            """;
+        var (_, compilation) = await RunGeneratorAsync(source);
+        var endpoint = GetEndpointFromCompilation(compilation);
+        var context = CreateHttpContext();
+
+        await endpoint.RequestDelegate(context);
+
+        Assert.Equal(409, context.Response.StatusCode);
+        await VerifyResponseBodyAsync(context, "replaced", expectedStatusCode: 409);
+    }
+
+    [Fact]
+    public async Task MapAction_ReturnsUnionOfIResultCases_FilterCanShortCircuitWithUnion()
+    {
+        var source = """
+            app.MapGet("/short-circuit", UnionTodoResult () => throw new InvalidOperationException("Handler must not run"))
+                .AddEndpointFilter((context, next) => ValueTask.FromResult<object?>(new UnionTodoResult(TypedResults.Problem(statusCode: 404))));
+            """;
+        var (_, compilation) = await RunGeneratorAsync(source);
+        var endpoint = GetEndpointFromCompilation(compilation);
+        var context = CreateHttpContext();
+
+        await endpoint.RequestDelegate(context);
+
+        Assert.Equal(404, context.Response.StatusCode);
+        Assert.Equal("application/problem+json", context.Response.ContentType);
     }
 }

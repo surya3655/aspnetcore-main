@@ -1,0 +1,404 @@
+{
+  "baselineSourceCommit": "90f48c2ea8ab6d5d0fbdcc2862c5e02aa279b44d",
+  "red": {
+    "failed": 48,
+    "passed": 8,
+    "skipped": 0
+  },
+  "greenRegression": {
+    "failed": 0,
+    "passed": 56,
+    "skipped": 0
+  },
+  "fullProject": {
+    "failed": 0,
+    "passed": 2395,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsMixedResultUnion_PreservesDataSerialization(resultCase: False)",
+      "before": "Passed",
+      "after": "Passed",
+      "control": "Existing null/data serialization or filter replacement remained valid."
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsMixedResultUnion_PreservesDataSerialization(resultCase: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"async-filter\", ok: False)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"async-filter\", ok: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"async-task\", ok: False)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"async-task\", ok: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"async-valuetask\", ok: False)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"async-valuetask\", ok: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"filter\", ok: False)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"filter\", ok: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"nullable\", ok: False)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"nullable\", ok: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"object\", ok: False)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"object\", ok: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"sync\", ok: False)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"sync\", ok: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"task\", ok: False)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"task\", ok: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"valuetask\", ok: False)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"valuetask\", ok: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_FilterCanReplaceResult",
+      "before": "Passed",
+      "after": "Passed",
+      "control": "Existing null/data serialization or filter replacement remained valid."
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_FilterCanShortCircuitWithUnion",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_HasPerCaseMetadata(returnStyle: \"nullable\")",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Missing case response metadata; union wrapper metadata inferred instead.",
+      "beforeAssertion": "Assert.Collection() Failure: Item comparison failure\n             \u2193 (pos 0)\nCollection: [Produces StatusCode: 200, ContentTypes: application/json, Type: System.Nullable`1[Microsoft.AspNetCore.Http.Generators.Tests.UnionTodoStatusResult]]\nError:      Assert.Equal() Failure: Values differ\n            Expected: typeof(Microsoft.AspNetCore.Http.Generators.Tests.Todo)\n            Actual:   typeof(UnionTodoStatusResult?)\n            Stack Trace:\n              /workspace/aspnetcore-main/src/Http/Http.Extensions/test/RequestDelegateGenerator/RequestDelegateCreationTests.Unions.Responses.cs(539,0): at Microsoft.AspNetCore.Http.Generators.Tests.RequestDelegateCreationTests.<>c.<MapAction_ReturnsUnionOfIResultCases_HasPerCaseMetadata>b__381_1(IProducesResponseTypeMetadata ok)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_HasPerCaseMetadata(returnStyle: \"sync\")",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Missing case response metadata; union wrapper metadata inferred instead.",
+      "beforeAssertion": "Assert.Collection() Failure: Item comparison failure\n             \u2193 (pos 0)\nCollection: [Produces StatusCode: 200, ContentTypes: application/json, Type: Microsoft.AspNetCore.Http.Generators.Tests.UnionTodoStatusResult]\nError:      Assert.Equal() Failure: Values differ\n            Expected: typeof(Microsoft.AspNetCore.Http.Generators.Tests.Todo)\n            Actual:   typeof(Microsoft.AspNetCore.Http.Generators.Tests.UnionTodoStatusResult)\n            Stack Trace:\n              /workspace/aspnetcore-main/src/Http/Http.Extensions/test/RequestDelegateGenerator/RequestDelegateCreationTests.Unions.Responses.cs(539,0): at Microsoft.AspNetCore.Http.Generators.Tests.RequestDelegateCreationTests.<>c.<MapAction_ReturnsUnionOfIResultCases_HasPerCaseMetadata>b__381_1(IProducesResponseTypeMetadata ok)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_HasPerCaseMetadata(returnStyle: \"task\")",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Missing case response metadata; union wrapper metadata inferred instead.",
+      "beforeAssertion": "Assert.Collection() Failure: Item comparison failure\n             \u2193 (pos 0)\nCollection: [Produces StatusCode: 200, ContentTypes: application/json, Type: Microsoft.AspNetCore.Http.Generators.Tests.UnionTodoStatusResult]\nError:      Assert.Equal() Failure: Values differ\n            Expected: typeof(Microsoft.AspNetCore.Http.Generators.Tests.Todo)\n            Actual:   typeof(Microsoft.AspNetCore.Http.Generators.Tests.UnionTodoStatusResult)\n            Stack Trace:\n              /workspace/aspnetcore-main/src/Http/Http.Extensions/test/RequestDelegateGenerator/RequestDelegateCreationTests.Unions.Responses.cs(539,0): at Microsoft.AspNetCore.Http.Generators.Tests.RequestDelegateCreationTests.<>c.<MapAction_ReturnsUnionOfIResultCases_HasPerCaseMetadata>b__381_1(IProducesResponseTypeMetadata ok)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_HasPerCaseMetadata(returnStyle: \"valuetask\")",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Missing case response metadata; union wrapper metadata inferred instead.",
+      "beforeAssertion": "Assert.Collection() Failure: Item comparison failure\n             \u2193 (pos 0)\nCollection: [Produces StatusCode: 200, ContentTypes: application/json, Type: Microsoft.AspNetCore.Http.Generators.Tests.UnionTodoStatusResult]\nError:      Assert.Equal() Failure: Values differ\n            Expected: typeof(Microsoft.AspNetCore.Http.Generators.Tests.Todo)\n            Actual:   typeof(Microsoft.AspNetCore.Http.Generators.Tests.UnionTodoStatusResult)\n            Stack Trace:\n              /workspace/aspnetcore-main/src/Http/Http.Extensions/test/RequestDelegateGenerator/RequestDelegateCreationTests.Unions.Responses.cs(539,0): at Microsoft.AspNetCore.Http.Generators.Tests.RequestDelegateCreationTests.<>c.<MapAction_ReturnsUnionOfIResultCases_HasPerCaseMetadata>b__381_1(IProducesResponseTypeMetadata ok)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_PreservesNullSerialization(route: \"/default\")",
+      "before": "Passed",
+      "after": "Passed",
+      "control": "Existing null/data serialization or filter replacement remained valid."
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.CompileTimeCreationTests.MapAction_ReturnsUnionOfIResultCases_PreservesNullSerialization(route: \"/nullable\")",
+      "before": "Passed",
+      "after": "Passed",
+      "control": "Existing null/data serialization or filter replacement remained valid."
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsMixedResultUnion_PreservesDataSerialization(resultCase: False)",
+      "before": "Passed",
+      "after": "Passed",
+      "control": "Existing null/data serialization or filter replacement remained valid."
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsMixedResultUnion_PreservesDataSerialization(resultCase: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"async-filter\", ok: False)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"async-filter\", ok: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"async-task\", ok: False)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"async-task\", ok: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"async-valuetask\", ok: False)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"async-valuetask\", ok: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"filter\", ok: False)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"filter\", ok: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"nullable\", ok: False)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"nullable\", ok: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"object\", ok: False)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"object\", ok: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"sync\", ok: False)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"sync\", ok: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"task\", ok: False)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"task\", ok: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"valuetask\", ok: False)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_ExecutesActiveResult(returnStyle: \"valuetask\", ok: True)",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected DTO JSON; observed serialized result wrapper.",
+      "beforeAssertion": "Assert.Equal() Failure: Strings differ\n             \u2193 (pos 2)\nExpected: \"{\"id\":1,\"name\":\"ann\",\"isComplete\":false}\"\nActual:   \"{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\"\u00b7\u00b7\u00b7\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_FilterCanReplaceResult",
+      "before": "Passed",
+      "after": "Passed",
+      "control": "Existing null/data serialization or filter replacement remained valid."
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_FilterCanShortCircuitWithUnion",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Expected HTTP 404; observed HTTP 200.",
+      "beforeAssertion": "Assert.Equal() Failure: Values differ\nExpected: 404\nActual:   200"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_HasPerCaseMetadata(returnStyle: \"nullable\")",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Missing case response metadata; union wrapper metadata inferred instead.",
+      "beforeAssertion": "Assert.Collection() Failure: Item comparison failure\n             \u2193 (pos 0)\nCollection: [Produces StatusCode: 200, ContentTypes: application/json, Type: System.Nullable`1[Microsoft.AspNetCore.Http.Generators.Tests.UnionTodoStatusResult]]\nError:      Assert.Equal() Failure: Values differ\n            Expected: typeof(Microsoft.AspNetCore.Http.Generators.Tests.Todo)\n            Actual:   typeof(UnionTodoStatusResult?)\n            Stack Trace:\n              /workspace/aspnetcore-main/src/Http/Http.Extensions/test/RequestDelegateGenerator/RequestDelegateCreationTests.Unions.Responses.cs(539,0): at Microsoft.AspNetCore.Http.Generators.Tests.RequestDelegateCreationTests.<>c.<MapAction_ReturnsUnionOfIResultCases_HasPerCaseMetadata>b__381_1(IProducesResponseTypeMetadata ok)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_HasPerCaseMetadata(returnStyle: \"sync\")",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Missing case response metadata; union wrapper metadata inferred instead.",
+      "beforeAssertion": "Assert.Collection() Failure: Item comparison failure\n             \u2193 (pos 0)\nCollection: [Produces StatusCode: 200, ContentTypes: application/json, Type: Microsoft.AspNetCore.Http.Generators.Tests.UnionTodoStatusResult]\nError:      Assert.Equal() Failure: Values differ\n            Expected: typeof(Microsoft.AspNetCore.Http.Generators.Tests.Todo)\n            Actual:   typeof(Microsoft.AspNetCore.Http.Generators.Tests.UnionTodoStatusResult)\n            Stack Trace:\n              /workspace/aspnetcore-main/src/Http/Http.Extensions/test/RequestDelegateGenerator/RequestDelegateCreationTests.Unions.Responses.cs(539,0): at Microsoft.AspNetCore.Http.Generators.Tests.RequestDelegateCreationTests.<>c.<MapAction_ReturnsUnionOfIResultCases_HasPerCaseMetadata>b__381_1(IProducesResponseTypeMetadata ok)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_HasPerCaseMetadata(returnStyle: \"task\")",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Missing case response metadata; union wrapper metadata inferred instead.",
+      "beforeAssertion": "Assert.Collection() Failure: Item comparison failure\n             \u2193 (pos 0)\nCollection: [Produces StatusCode: 200, ContentTypes: application/json, Type: Microsoft.AspNetCore.Http.Generators.Tests.UnionTodoStatusResult]\nError:      Assert.Equal() Failure: Values differ\n            Expected: typeof(Microsoft.AspNetCore.Http.Generators.Tests.Todo)\n            Actual:   typeof(Microsoft.AspNetCore.Http.Generators.Tests.UnionTodoStatusResult)\n            Stack Trace:\n              /workspace/aspnetcore-main/src/Http/Http.Extensions/test/RequestDelegateGenerator/RequestDelegateCreationTests.Unions.Responses.cs(539,0): at Microsoft.AspNetCore.Http.Generators.Tests.RequestDelegateCreationTests.<>c.<MapAction_ReturnsUnionOfIResultCases_HasPerCaseMetadata>b__381_1(IProducesResponseTypeMetadata ok)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_HasPerCaseMetadata(returnStyle: \"valuetask\")",
+      "before": "Failed",
+      "after": "Passed",
+      "expectedFailure": "Missing case response metadata; union wrapper metadata inferred instead.",
+      "beforeAssertion": "Assert.Collection() Failure: Item comparison failure\n             \u2193 (pos 0)\nCollection: [Produces StatusCode: 200, ContentTypes: application/json, Type: Microsoft.AspNetCore.Http.Generators.Tests.UnionTodoStatusResult]\nError:      Assert.Equal() Failure: Values differ\n            Expected: typeof(Microsoft.AspNetCore.Http.Generators.Tests.Todo)\n            Actual:   typeof(Microsoft.AspNetCore.Http.Generators.Tests.UnionTodoStatusResult)\n            Stack Trace:\n              /workspace/aspnetcore-main/src/Http/Http.Extensions/test/RequestDelegateGenerator/RequestDelegateCreationTests.Unions.Responses.cs(539,0): at Microsoft.AspNetCore.Http.Generators.Tests.RequestDelegateCreationTests.<>c.<MapAction_ReturnsUnionOfIResultCases_HasPerCaseMetadata>b__381_1(IProducesResponseTypeMetadata ok)"
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_PreservesNullSerialization(route: \"/default\")",
+      "before": "Passed",
+      "after": "Passed",
+      "control": "Existing null/data serialization or filter replacement remained valid."
+    },
+    {
+      "test": "Microsoft.AspNetCore.Http.Generators.Tests.RuntimeCreationTests.MapAction_ReturnsUnionOfIResultCases_PreservesNullSerialization(route: \"/nullable\")",
+      "before": "Passed",
+      "after": "Passed",
+      "control": "Existing null/data serialization or filter replacement remained valid."
+    }
+  ]
+}
