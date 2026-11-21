@@ -7,7 +7,7 @@ Ready-to-file convention proposal for `dotnet/aspnetcore`.
 - Champion: not assigned; a maintainer must champion the review
 - Status: not filed; this session has no native GitHub issue-creation tool
 - Originating issue: https://github.com/dotnet/aspnetcore/issues/70454
-- Implementation: the implementation draft PR containing this document
+- Implementation: https://github.com/surya3655/aspnetcore-main/pull/2
 
 ## Evidence checklist
 
