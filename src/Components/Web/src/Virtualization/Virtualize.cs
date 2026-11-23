@@ -929,7 +929,7 @@ public sealed class Virtualize<TItem> : ComponentBase, IVirtualizeJsCallbacks, I
     {
         var hadNewMeasurements = AccumulateMeasurement(spacerSeparation);
         RecalibrateItemSize(spacerSeparation);
-        var spacerItemSize = GetEffectiveItemSize(_lastRenderedItemSize);
+        var spacerItemSize = GetEffectiveItemSize((AnchorMode & VirtualizeAnchorMode.End) != 0 ? _lastRenderedItemSize : GetItemHeight());
         var effectiveItemSize = GetEffectiveItemSize(GetItemHeight());
 
         // This AppContext data was added as a stopgap for .NET 8 and earlier, since it was added in a patch
