@@ -1,0 +1,13 @@
+
+> @microsoft/microsoft.aspnetcore.components.web.js@0.0.1 test
+> jest --runInBand Virtualize.test.ts
+
+PASS test/Virtualize.test.ts
+  Virtualize exports
+    ✓ exports expected functions (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        1.014 s, estimated 3 s
+Ran all test suites matching /Virtualize.test.ts/i.

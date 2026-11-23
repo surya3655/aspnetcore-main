@@ -1,0 +1,103 @@
+  Microsoft.AspNetCore.InternalTesting -> artifacts/bin/Microsoft.AspNetCore.InternalTesting/Debug/net12.0/Microsoft.AspNetCore.InternalTesting.dll
+  Microsoft.AspNetCore.Metadata -> artifacts/bin/Microsoft.AspNetCore.Metadata/Debug/net12.0/Microsoft.AspNetCore.Metadata.dll
+  Microsoft.AspNetCore.Authorization -> artifacts/bin/Microsoft.AspNetCore.Authorization/Debug/net12.0/Microsoft.AspNetCore.Authorization.dll
+  Microsoft.AspNetCore.Cryptography.Internal -> artifacts/bin/Microsoft.AspNetCore.Cryptography.Internal/Debug/net12.0/Microsoft.AspNetCore.Cryptography.Internal.dll
+  Microsoft.AspNetCore.DataProtection.Abstractions -> artifacts/bin/Microsoft.AspNetCore.DataProtection.Abstractions/Debug/net12.0/Microsoft.AspNetCore.DataProtection.Abstractions.dll
+  Microsoft.AspNetCore.DataProtection -> artifacts/bin/Microsoft.AspNetCore.DataProtection/Debug/net12.0/Microsoft.AspNetCore.DataProtection.dll
+  Microsoft.Extensions.Features -> artifacts/bin/Microsoft.Extensions.Features/Debug/net12.0/Microsoft.Extensions.Features.dll
+  Microsoft.Extensions.Localization.Abstractions -> artifacts/bin/Microsoft.Extensions.Localization.Abstractions/Debug/net12.0/Microsoft.Extensions.Localization.Abstractions.dll
+  Microsoft.Extensions.ObjectPool -> artifacts/bin/Microsoft.Extensions.ObjectPool/Debug/net12.0/Microsoft.Extensions.ObjectPool.dll
+  Microsoft.AspNetCore.Connections.Abstractions -> artifacts/bin/Microsoft.AspNetCore.Connections.Abstractions/Debug/net12.0/Microsoft.AspNetCore.Connections.Abstractions.dll
+  Microsoft.Net.Http.Headers -> artifacts/bin/Microsoft.Net.Http.Headers/Debug/net12.0/Microsoft.Net.Http.Headers.dll
+  Microsoft.AspNetCore.Http.Features -> artifacts/bin/Microsoft.AspNetCore.Http.Features/Debug/net12.0/Microsoft.AspNetCore.Http.Features.dll
+  Microsoft.AspNetCore.Http.Abstractions -> artifacts/bin/Microsoft.AspNetCore.Http.Abstractions/Debug/net12.0/Microsoft.AspNetCore.Http.Abstractions.dll
+  Microsoft.AspNetCore.WebUtilities -> artifacts/bin/Microsoft.AspNetCore.WebUtilities/Debug/net12.0/Microsoft.AspNetCore.WebUtilities.dll
+  Microsoft.AspNetCore.Http.Extensions -> artifacts/bin/Microsoft.AspNetCore.Http.Extensions/Debug/net12.0/Microsoft.AspNetCore.Http.Extensions.dll
+  Microsoft.AspNetCore.Antiforgery -> artifacts/bin/Microsoft.AspNetCore.Antiforgery/Debug/net12.0/Microsoft.AspNetCore.Antiforgery.dll
+  The package Microsoft.AspNetCore.App.Internal.Assets.12.0.0-dev is missing a readme. Go to https://aka.ms/nuget/authoring-best-practices/readme to learn why package readmes are important.
+  Successfully created package 'artifacts/packages/Debug/Shipping/Microsoft.AspNetCore.App.Internal.Assets.12.0.0-dev.nupkg'.
+  Microsoft.AspNetCore.Components -> artifacts/bin/Microsoft.AspNetCore.Components/Debug/net12.0/Microsoft.AspNetCore.Components.dll
+  Microsoft.Extensions.Validation.ValidationsGenerator -> artifacts/bin/Microsoft.Extensions.Validation.ValidationsGenerator/Debug/netstandard2.0/Microsoft.Extensions.Validation.ValidationsGenerator.dll
+  Microsoft.Extensions.Validation -> artifacts/bin/Microsoft.Extensions.Validation/Debug/net12.0/Microsoft.Extensions.Validation.dll
+  Microsoft.AspNetCore.Components.Forms -> artifacts/bin/Microsoft.AspNetCore.Components.Forms/Debug/net12.0/Microsoft.AspNetCore.Components.Forms.dll
+  Microsoft.JSInterop -> artifacts/bin/Microsoft.JSInterop/Debug/net12.0/Microsoft.JSInterop.dll
+  Microsoft.AspNetCore.Components.Web -> artifacts/bin/Microsoft.AspNetCore.Components.Web/Debug/net12.0/Microsoft.AspNetCore.Components.Web.dll
+  Microsoft.AspNetCore.Routing.Abstractions -> artifacts/bin/Microsoft.AspNetCore.Routing.Abstractions/Debug/net12.0/Microsoft.AspNetCore.Routing.Abstractions.dll
+  Microsoft.AspNetCore.Http -> artifacts/bin/Microsoft.AspNetCore.Http/Debug/net12.0/Microsoft.AspNetCore.Http.dll
+  Microsoft.AspNetCore.Routing -> artifacts/bin/Microsoft.AspNetCore.Routing/Debug/net12.0/Microsoft.AspNetCore.Routing.dll
+  Microsoft.AspNetCore.Components.Web.Tests -> artifacts/bin/Microsoft.AspNetCore.Components.Web.Tests/Debug/net12.0/Microsoft.AspNetCore.Components.Web.Tests.dll
+Test run for artifacts/bin/Microsoft.AspNetCore.Components.Web.Tests/Debug/net12.0/Microsoft.AspNetCore.Components.Web.Tests.dll (.NETCoreApp,Version=v12.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.3+b1b99bdeb3 (64-bit .NET 12.0.0-alpha.1.26569.107)
+[xUnit.net 00:00:00.57]   Discovering: Microsoft.AspNetCore.Components.Web.Tests
+[xUnit.net 00:00:00.68]   Discovered:  Microsoft.AspNetCore.Components.Web.Tests
+[xUnit.net 00:00:00.72]   Starting:    Microsoft.AspNetCore.Components.Web.Tests
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_Recalibration_EndAnchor_PreservesRenderedEstimateAndCorrection(beforeSpacer: True, measuredItemSize: 100, expectedItemsBefore: 99, expectedCapacity: 35) [379 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_Recalibration_EndAnchor_PreservesRenderedEstimateAndCorrection(beforeSpacer: False, measuredItemSize: 25, expectedItemsBefore: 665, expectedCapacity: 50) [6 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_Recalibration_EndAnchor_PreservesRenderedEstimateAndCorrection(beforeSpacer: True, measuredItemSize: 25, expectedItemsBefore: 99, expectedCapacity: 50) [< 1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_Recalibration_EndAnchor_PreservesRenderedEstimateAndCorrection(beforeSpacer: False, measuredItemSize: 100, expectedItemsBefore: 680, expectedCapacity: 35) [< 1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_CanceledPrependAdjustment_DoesNotOverwriteNewerWindow [78 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.InitialIndex_ShortListThatFits_TargetOnScreenWithoutScroll_DoesNotStall [57 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.ScrollToIndexAsync_CancellationCancelsProviderRequest [15 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_BothSpacersVisible_SmallItemCountDoesNotCrash [1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_RapidScrollCancellation_StaleRequestsCancelled [18 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_Recalibration_WithoutEndAnchor_UsesCurrentEstimate(anchorMode: None, beforeSpacer: True, measuredItemSize: 25, expectedItemsBefore: 215, expectedCapacity: 50) [6 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_Recalibration_WithoutEndAnchor_UsesCurrentEstimate(anchorMode: None, beforeSpacer: False, measuredItemSize: 25, expectedItemsBefore: 365, expectedCapacity: 50) [< 1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_Recalibration_WithoutEndAnchor_UsesCurrentEstimate(anchorMode: Start, beforeSpacer: False, measuredItemSize: 25, expectedItemsBefore: 365, expectedCapacity: 50) [< 1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_Recalibration_WithoutEndAnchor_UsesCurrentEstimate(anchorMode: Start, beforeSpacer: True, measuredItemSize: 100, expectedItemsBefore: 42, expectedCapacity: 35) [< 1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_Recalibration_WithoutEndAnchor_UsesCurrentEstimate(anchorMode: None, beforeSpacer: True, measuredItemSize: 100, expectedItemsBefore: 42, expectedCapacity: 35) [< 1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_Recalibration_WithoutEndAnchor_UsesCurrentEstimate(anchorMode: Start, beforeSpacer: True, measuredItemSize: 25, expectedItemsBefore: 215, expectedCapacity: 50) [< 1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_Recalibration_WithoutEndAnchor_UsesCurrentEstimate(anchorMode: Start, beforeSpacer: False, measuredItemSize: 100, expectedItemsBefore: 830, expectedCapacity: 35) [< 1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_Recalibration_WithoutEndAnchor_UsesCurrentEstimate(anchorMode: None, beforeSpacer: False, measuredItemSize: 100, expectedItemsBefore: 830, expectedCapacity: 35) [< 1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_Recalibration_UsesMeasuredViewportCapacity(measuredItemSize: 100, expectedItemCount: 35) [9 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_Recalibration_UsesMeasuredViewportCapacity(measuredItemSize: 25, expectedItemCount: 50) [< 1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_NonZeroStartIndex_ItemsProviderReceivesCorrectStartIndex [6 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_ItemsProvider_GrowingTotalCount_DoesNotAssumePrepend [2 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.ScrollToIndexAsync_ThrowsBeforeJsInteropInitialized [1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.InitialIndex_NegativeClampsToZero [1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_ZeroSpacerSeparationDoesNotCorruptAverage [1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.ScrollToIndexAsync_EmptyListCompletesAsNoOp [5 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_Recalibration_AsyncProvider_PreservesLoadingAndCancellation [20 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.ScrollToIndexAsync_IndexBeyondCountDoesNotThrow [2 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.MaxItemCount_ClampsVisibleItemCapacity [5 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_ItemsProvider_GrowthWhileWindowMovesPastPreviousFirstItem_DistinguishesPrependFromAppend(prepend: True, expectedItemsBefore: 140) [2 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_ItemsProvider_GrowthWhileWindowMovesPastPreviousFirstItem_DistinguishesPrependFromAppend(prepend: False, expectedItemsBefore: 130) [1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.InitialIndex_DefaultZeroMeansNoInitialScroll [< 1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_DisposedWhileLaterRenderInteropPending_DoesNotUseDisposedObjectReference [18 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_RendersItemsWithoutWrapperElements [2 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.OnBeforeSpacerVisible_ProgrammaticScroll_DoesNotResetWindow [2 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_TableSpacerElement_RendersItemsDirectlyWithTrSpacers [9 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_MeasurementsUpdateRunningAverage [1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.ScrollToIndexAsync_NegativeIndexDoesNotThrow [1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_ScrollToBottom_NotSetWhenMeasurementsNotApplied [3 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_ThrowsWhenGivenNonPositiveItemSize [2 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_NegativeSpacerSeparationDoesNotCrashComponent [1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_ThrowsWhenGivenNoItemSources [< 1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.InitialIndex_BeyondCountClampsToEnd [9 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.OnBeforeSpacerVisible_UserScroll_MovesWindowTowardTop [1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.ScrollToIndexAsync_ProviderThrows_FaultsTaskInsteadOfHanging [1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_SpacersUseDataAttributeNotInlineStyle [4 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.InitialIndex_MeasurementDoesNotChangeSpacerUntilPositioningCompletes [4 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_OnBeforeSpacerVisible_MeasuredSpacerTriggersProviderFetch [< 1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_FixedItems_MeasurementsAccumulateWithoutBreakingRendering [1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_ScrollToBottom_SetWhenAtEndWithNewMeasurements [3 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.InitialIndex_ParameterRoundTrip [8 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.ScrollToIndexAsync_SecondCallDoesNotFaultFirstTask [5 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_RefreshDataAsync_ResetsRunningAverage [3 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_ScrollToBottom_NotSetWhenNotAtEnd [< 1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_InfinitySpacerSeparationDoesNotCrashComponent [1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_ThrowsWhenGivenMultipleItemSources [5 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_DispatchesExceptionsFromItemsProviderThroughRenderer [1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_DefaultProvider_ValueTypeItem_AppendDoesNotAssumePrepend [3 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_DisposedWhileInitializationPending_DoesNotUseDisposedObjectReference [779 ms]
+[xUnit.net 00:00:02.74]   Finished:    Microsoft.AspNetCore.Components.Web.Tests
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.InitialIndex_ApplyingMeasuredGeometry_PreservesRunningAverage [58 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_NaNSpacerSeparationDoesNotCrashComponent [1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_FirstRender_DoesNotShiftStartIndexAwayFromZero [23 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.ScrollToIndexAsync_AlreadyCancelledTokenProducesCancelledTask [< 1 ms]
+  Passed Microsoft.AspNetCore.Components.Virtualization.VirtualizeTest.Virtualize_ItemsProvider_PrependedSinglePassEnumerable_IsNotEnumeratedMoreThanOnce [23 ms]
+
+Test Run Successful.
+Total tests: 63
+     Passed: 63
+ Total time: 3.5877 Seconds
