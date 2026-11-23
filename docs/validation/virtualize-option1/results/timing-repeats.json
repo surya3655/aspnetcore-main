@@ -1,0 +1,802 @@
+[
+  {
+    "run": "ordered-repeat-1",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 705.6999999999534,
+        "deliveryEstimate": 144,
+        "delivered": 830.6000000000931
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 821.6999999999534,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 893.5
+      }
+    ],
+    "markerLost": false
+  },
+  {
+    "run": "ordered-repeat-10",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 309.3000000002794,
+        "deliveryEstimate": 144,
+        "delivered": 428.8000000002794
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 409.10000000009313,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 441.40000000037253
+      }
+    ],
+    "markerLost": false
+  },
+  {
+    "run": "ordered-repeat-2",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 669.0000000002328,
+        "deliveryEstimate": 144,
+        "delivered": 790.5999999998603
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 761.3000000000466,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 848.1999999999534
+      }
+    ],
+    "markerLost": false
+  },
+  {
+    "run": "ordered-repeat-3",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 588.3999999999069,
+        "deliveryEstimate": 144,
+        "delivered": 712.8999999999069
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 687.8999999999069,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 728.6000000000931
+      }
+    ],
+    "markerLost": false
+  },
+  {
+    "run": "ordered-repeat-4",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 629,
+        "deliveryEstimate": 144,
+        "delivered": 755
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 726.9000000003725,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 777.4000000003725
+      }
+    ],
+    "markerLost": false
+  },
+  {
+    "run": "ordered-repeat-5",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 731.5,
+        "deliveryEstimate": 144,
+        "delivered": 855
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 831.3000000002794,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 882
+      }
+    ],
+    "markerLost": false
+  },
+  {
+    "run": "ordered-repeat-6",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 429.10000000009313,
+        "deliveryEstimate": 144,
+        "delivered": 553.3999999999069
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 528.7999999998137,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 571
+      }
+    ],
+    "markerLost": false
+  },
+  {
+    "run": "ordered-repeat-7",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 376.20000000018626,
+        "deliveryEstimate": 144,
+        "delivered": 495.39999999990687
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 476.39999999990687,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 505.10000000009313
+      }
+    ],
+    "markerLost": false
+  },
+  {
+    "run": "ordered-repeat-8",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 359.10000000009313,
+        "deliveryEstimate": 144,
+        "delivered": 476.29999999981374
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 457.10000000009313,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 489.39999999990687
+      }
+    ],
+    "markerLost": false
+  },
+  {
+    "run": "ordered-repeat-9",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 321.70000000018626,
+        "deliveryEstimate": 144,
+        "delivered": 439.5
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 419.89999999990687,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 450.39999999990687
+      }
+    ],
+    "markerLost": false
+  },
+  {
+    "run": "same-batch-repeat-1",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 810.1000000000931,
+        "deliveryEstimate": 144,
+        "delivered": 930.6999999999534
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 910,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 981.1000000000931
+      }
+    ],
+    "markerLost": true
+  },
+  {
+    "run": "same-batch-repeat-10",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 358,
+        "deliveryEstimate": 144,
+        "delivered": 476.60000000009313
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 458.60000000009313,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 491.39999999990687
+      }
+    ],
+    "markerLost": true
+  },
+  {
+    "run": "same-batch-repeat-2",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 521.8999999999069,
+        "deliveryEstimate": 144,
+        "delivered": 647.6999999997206
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 617.6999999997206,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 705
+      }
+    ],
+    "markerLost": true
+  },
+  {
+    "run": "same-batch-repeat-3",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 456.5,
+        "deliveryEstimate": 144,
+        "delivered": 577.6000000000931
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 554.3000000002794,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 592.5
+      }
+    ],
+    "markerLost": true
+  },
+  {
+    "run": "same-batch-repeat-4",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 561.2999999998137,
+        "deliveryEstimate": 144,
+        "delivered": 685.6999999997206
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 661,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 706.7999999998137
+      }
+    ],
+    "markerLost": true
+  },
+  {
+    "run": "same-batch-repeat-5",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 412.29999999981374,
+        "deliveryEstimate": 144,
+        "delivered": 535.7999999998137
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 512,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 554
+      }
+    ],
+    "markerLost": true
+  },
+  {
+    "run": "same-batch-repeat-6",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 435,
+        "deliveryEstimate": 144,
+        "delivered": 556.6999999997206
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 535.3999999999069,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 576
+      }
+    ],
+    "markerLost": true
+  },
+  {
+    "run": "same-batch-repeat-7",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 396.89999999990687,
+        "deliveryEstimate": 144,
+        "delivered": 518.3999999999069
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 496.5,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 531
+      }
+    ],
+    "markerLost": true
+  },
+  {
+    "run": "same-batch-repeat-8",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 421.09999999962747,
+        "deliveryEstimate": 144,
+        "delivered": 539.2999999998137
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 519.7999999998137,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 550.3999999999069
+      }
+    ],
+    "markerLost": true
+  },
+  {
+    "run": "same-batch-repeat-9",
+    "estimateA": 144,
+    "estimateB": 144.827590011032,
+    "released": [
+      2,
+      3
+    ],
+    "reports": [
+      {
+        "seq": 2,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 341.6999999997206,
+        "deliveryEstimate": 144,
+        "delivered": 462.79999999981374
+      },
+      {
+        "seq": 3,
+        "method": "OnSpacerBeforeVisible",
+        "args": [
+          1436555.96875,
+          2040,
+          518,
+          0
+        ],
+        "producedEstimate": 144,
+        "produced": 441.5,
+        "deliveryEstimate": 144.827590011032,
+        "delivered": 479.6999999997206
+      }
+    ],
+    "markerLost": true
+  }
+]

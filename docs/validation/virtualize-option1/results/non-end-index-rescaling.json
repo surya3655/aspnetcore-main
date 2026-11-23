@@ -1,0 +1,138 @@
+{
+  "none": {
+    "diagnostic": {
+      "errors": [],
+      "initial": {
+        "scrollTop": 0,
+        "scrollHeight": 1200360,
+        "itemCount": 15,
+        "firstIndex": 1,
+        "lastIndex": 4,
+        "topCovered": true,
+        "bottomCovered": true,
+        "clientHeight": 420
+      },
+      "bounds": {
+        "root": {
+          "x": 8,
+          "y": 159,
+          "width": 1184,
+          "height": 422,
+          "top": 159,
+          "right": 1192,
+          "bottom": 581,
+          "left": 8
+        },
+        "innerHeight": 900
+      },
+      "middle": {
+        "scrollTop": 599970,
+        "scrollHeight": 1406967,
+        "itemCount": 14,
+        "firstIndex": 4265,
+        "lastIndex": 4267,
+        "topCovered": true,
+        "bottomCovered": true,
+        "clientHeight": 420
+      },
+      "end": {
+        "scrollTop": 1407954,
+        "scrollHeight": 1408374,
+        "itemCount": 14,
+        "firstIndex": 10008,
+        "lastIndex": 10010,
+        "topCovered": true,
+        "bottomCovered": true,
+        "clientHeight": 420
+      },
+      "firstTail": "9997",
+      "upward": {
+        "scrollTop": 1401954,
+        "scrollHeight": 1424727,
+        "itemCount": 14,
+        "firstIndex": 9850,
+        "lastIndex": 9853,
+        "topCovered": true,
+        "bottomCovered": true,
+        "clientHeight": 420
+      },
+      "final": {
+        "scrollTop": 1401954,
+        "firstRendered": "9845",
+        "height": 1424727,
+        "text": "Item 9845\n\nAdditional details for this item.\n\nItem 9846\nItem 9847\nItem 9848\nItem 9849\nItem 9850\n\nAdditional details for this item.\n\nItem 9851\nItem 9852\nItem 9853\nItem 9854\nItem 9855\n\nAdditional details for this item.\n\nItem 9856\nItem 9857\nItem 9858"
+      },
+      "ok": false
+    },
+    "contractEarlierAndCovered": true,
+    "note": "diagnostic ok=false used an invalid End-only near-tail bound; the valid non-End coverage/earlier-row contract passes"
+  },
+  "start": {
+    "diagnostic": {
+      "errors": [],
+      "initial": {
+        "scrollTop": 0,
+        "scrollHeight": 1200360,
+        "itemCount": 15,
+        "firstIndex": 1,
+        "lastIndex": 4,
+        "topCovered": true,
+        "bottomCovered": true,
+        "clientHeight": 420
+      },
+      "bounds": {
+        "root": {
+          "x": 8,
+          "y": 159,
+          "width": 1184,
+          "height": 422,
+          "top": 159,
+          "right": 1192,
+          "bottom": 581,
+          "left": 8
+        },
+        "innerHeight": 900
+      },
+      "middle": {
+        "scrollTop": 599970,
+        "scrollHeight": 1406967,
+        "itemCount": 14,
+        "firstIndex": 4265,
+        "lastIndex": 4267,
+        "topCovered": true,
+        "bottomCovered": true,
+        "clientHeight": 420
+      },
+      "end": {
+        "scrollTop": 1407954,
+        "scrollHeight": 1408374,
+        "itemCount": 14,
+        "firstIndex": 10008,
+        "lastIndex": 10010,
+        "topCovered": true,
+        "bottomCovered": true,
+        "clientHeight": 420
+      },
+      "firstTail": "9997",
+      "upward": {
+        "scrollTop": 1401954,
+        "scrollHeight": 1424727,
+        "itemCount": 14,
+        "firstIndex": 9850,
+        "lastIndex": 9853,
+        "topCovered": true,
+        "bottomCovered": true,
+        "clientHeight": 420
+      },
+      "final": {
+        "scrollTop": 1401954,
+        "firstRendered": "9845",
+        "height": 1424727,
+        "text": "Item 9845\n\nAdditional details for this item.\n\nItem 9846\nItem 9847\nItem 9848\nItem 9849\nItem 9850\n\nAdditional details for this item.\n\nItem 9851\nItem 9852\nItem 9853\nItem 9854\nItem 9855\n\nAdditional details for this item.\n\nItem 9856\nItem 9857\nItem 9858"
+      },
+      "ok": false
+    },
+    "contractEarlierAndCovered": true,
+    "note": "diagnostic ok=false used an invalid End-only near-tail bound; the valid non-End coverage/earlier-row contract passes"
+  }
+}

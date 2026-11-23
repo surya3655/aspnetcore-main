@@ -1,0 +1,112 @@
+{
+  "reports": [
+    {
+      "seq": 0,
+      "method": "OnSpacerBeforeVisible",
+      "args": [
+        0,
+        0,
+        518,
+        2
+      ],
+      "producedEstimate": null,
+      "produced": 410.19999999995343,
+      "deliveryEstimate": null,
+      "delivered": 410.19999999995343
+    },
+    {
+      "seq": 1,
+      "method": "OnSpacerAfterVisible",
+      "args": [
+        0.03125,
+        2160,
+        518,
+        2
+      ],
+      "producedEstimate": null,
+      "produced": 572.8000000000466,
+      "deliveryEstimate": null,
+      "delivered": 572.8000000000466
+    },
+    {
+      "seq": 2,
+      "method": "OnSpacerBeforeVisible",
+      "args": [
+        1436555.96875,
+        2040,
+        518,
+        0
+      ],
+      "producedEstimate": 144,
+      "produced": 705.6999999999534,
+      "deliveryEstimate": 144,
+      "delivered": 830.6000000000931
+    },
+    {
+      "seq": 3,
+      "method": "OnSpacerBeforeVisible",
+      "args": [
+        1436555.96875,
+        2040,
+        518,
+        0
+      ],
+      "producedEstimate": 144,
+      "produced": 821.6999999999534,
+      "deliveryEstimate": 144.827590011032,
+      "delivered": 893.5
+    },
+    {
+      "seq": 4,
+      "method": "OnSpacerAfterVisible",
+      "args": [
+        2984.1411435543205,
+        2040.0003544909396,
+        518.0000900128955,
+        2
+      ],
+      "producedEstimate": 145.1162800080694,
+      "produced": 906
+    }
+  ],
+  "writes": [
+    {
+      "kind": "set",
+      "value": "144:144.82759",
+      "at": 832.4000000001397
+    },
+    {
+      "kind": "set",
+      "value": "144.82759:145.11627",
+      "at": 896.5
+    }
+  ],
+  "deliveries": [
+    {
+      "at": 833.6000000000931,
+      "records": [
+        {
+          "name": "data-blazor-virtualize-scroll-recalibration",
+          "live": "144:144.82759"
+        }
+      ]
+    },
+    {
+      "at": 897.4000000001397,
+      "records": [
+        {
+          "name": "data-blazor-virtualize-scroll-recalibration",
+          "live": "144.82759:145.11627"
+        }
+      ]
+    }
+  ],
+  "estimateA": 144,
+  "estimateB": 144.827590011032,
+  "released": [
+    2,
+    3
+  ],
+  "sameBatch": false,
+  "markerLost": false
+}

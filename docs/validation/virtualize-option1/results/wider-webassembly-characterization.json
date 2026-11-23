@@ -1,0 +1,448 @@
+{
+  "900": {
+    "errors": [],
+    "initial": {
+      "scrollTop": 0,
+      "scrollHeight": 1200360,
+      "itemCount": 15,
+      "firstIndex": 1,
+      "lastIndex": 4,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "bounds": {
+      "root": {
+        "x": 8,
+        "y": 159,
+        "width": 1184,
+        "height": 422,
+        "top": 159,
+        "right": 1192,
+        "bottom": 581,
+        "left": 8
+      },
+      "innerHeight": 900
+    },
+    "middle": {
+      "scrollTop": 599970,
+      "scrollHeight": 1406967,
+      "itemCount": 14,
+      "firstIndex": 4265,
+      "lastIndex": 4267,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "end": {
+      "scrollTop": 1407693,
+      "scrollHeight": 1408113,
+      "itemCount": 14,
+      "firstIndex": 10006,
+      "lastIndex": 10009,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "firstTail": "9996",
+    "error": "Timeout waiting for: render to settle (3 consecutive stable geometry reads)",
+    "final": {
+      "scrollTop": 1401693,
+      "firstRendered": "9996",
+      "height": 1408113,
+      "text": "Item 9996\nItem 9997\nItem 9998\nItem 9999\nItem 10000\n\nAdditional details for this item.\n\nItem 10001\nItem 10002\nItem 10003\nItem 10004\nItem 10005\n\nAdditional details for this item.\n\nItem 10006\nItem 10007\nItem 10008\nItem 10009"
+    },
+    "ok": false
+  },
+  "380": {
+    "errors": [],
+    "initial": {
+      "scrollTop": 0,
+      "scrollHeight": 1200360,
+      "itemCount": 15,
+      "firstIndex": 1,
+      "lastIndex": 4,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "bounds": {
+      "root": {
+        "x": 8,
+        "y": 159,
+        "width": 1184,
+        "height": 422,
+        "top": 159,
+        "right": 1192,
+        "bottom": 581,
+        "left": 8
+      },
+      "innerHeight": 380
+    },
+    "middle": {
+      "scrollTop": 599970,
+      "scrollHeight": 1406967,
+      "itemCount": 14,
+      "firstIndex": 4265,
+      "lastIndex": 4267,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "end": {
+      "scrollTop": 1407693,
+      "scrollHeight": 1408113,
+      "itemCount": 14,
+      "firstIndex": 10006,
+      "lastIndex": 10009,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "firstTail": "9996",
+    "error": "Timeout waiting for: render to settle (3 consecutive stable geometry reads)",
+    "final": {
+      "scrollTop": 1401693,
+      "firstRendered": "9996",
+      "height": 1408113,
+      "text": "Item 9996\nItem 9997\nItem 9998\nItem 9999\nItem 10000\n\nAdditional details for this item.\n\nItem 10001\nItem 10002\nItem 10003\nItem 10004\nItem 10005\n\nAdditional details for this item.\n\nItem 10006\nItem 10007\nItem 10008\nItem 10009"
+    },
+    "ok": false
+  },
+  "main-none-fixed": {
+    "errors": [],
+    "initial": {
+      "scrollTop": 0,
+      "scrollHeight": 1200360,
+      "itemCount": 15,
+      "firstIndex": 1,
+      "lastIndex": 4,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "bounds": {
+      "root": {
+        "x": 8,
+        "y": 159,
+        "width": 1184,
+        "height": 422,
+        "top": 159,
+        "right": 1192,
+        "bottom": 581,
+        "left": 8
+      },
+      "innerHeight": 900
+    },
+    "middle": {
+      "scrollTop": 599970,
+      "scrollHeight": 1406967,
+      "itemCount": 14,
+      "firstIndex": 4265,
+      "lastIndex": 4267,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "end": {
+      "scrollTop": 1407693,
+      "scrollHeight": 1408113,
+      "itemCount": 14,
+      "firstIndex": 10006,
+      "lastIndex": 10009,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "firstTail": "9996",
+    "error": "Timeout waiting for: render to settle (3 consecutive stable geometry reads)",
+    "final": {
+      "scrollTop": 1401693,
+      "firstRendered": "9996",
+      "height": 1408113,
+      "text": "Item 9996\nItem 9997\nItem 9998\nItem 9999\nItem 10000\n\nAdditional details for this item.\n\nItem 10001\nItem 10002\nItem 10003\nItem 10004\nItem 10005\n\nAdditional details for this item.\n\nItem 10006\nItem 10007\nItem 10008\nItem 10009"
+    },
+    "ok": false
+  },
+  "main-start-fixed": {
+    "errors": [],
+    "initial": {
+      "scrollTop": 0,
+      "scrollHeight": 1200360,
+      "itemCount": 15,
+      "firstIndex": 1,
+      "lastIndex": 4,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "bounds": {
+      "root": {
+        "x": 8,
+        "y": 159,
+        "width": 1184,
+        "height": 422,
+        "top": 159,
+        "right": 1192,
+        "bottom": 581,
+        "left": 8
+      },
+      "innerHeight": 900
+    },
+    "middle": {
+      "scrollTop": 599970,
+      "scrollHeight": 1406967,
+      "itemCount": 14,
+      "firstIndex": 4265,
+      "lastIndex": 4267,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "end": {
+      "scrollTop": 1407693,
+      "scrollHeight": 1408113,
+      "itemCount": 14,
+      "firstIndex": 10006,
+      "lastIndex": 10009,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "firstTail": "9996",
+    "error": "Timeout waiting for: render to settle (3 consecutive stable geometry reads)",
+    "final": {
+      "scrollTop": 1401693,
+      "firstRendered": "9996",
+      "height": 1408113,
+      "text": "Item 9996\nItem 9997\nItem 9998\nItem 9999\nItem 10000\n\nAdditional details for this item.\n\nItem 10001\nItem 10002\nItem 10003\nItem 10004\nItem 10005\n\nAdditional details for this item.\n\nItem 10006\nItem 10007\nItem 10008\nItem 10009"
+    },
+    "ok": false
+  },
+  "main-end-fixed": {
+    "errors": [],
+    "initial": {
+      "scrollTop": 1439604,
+      "scrollHeight": 1440024,
+      "itemCount": 14,
+      "firstIndex": 9998,
+      "lastIndex": 10000,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "bounds": {
+      "root": {
+        "x": 8,
+        "y": 159,
+        "width": 1184,
+        "height": 422,
+        "top": 159,
+        "right": 1192,
+        "bottom": 581,
+        "left": 8
+      },
+      "innerHeight": 900
+    },
+    "middle": {
+      "scrollTop": 719802,
+      "scrollHeight": 1448288,
+      "itemCount": 14,
+      "firstIndex": 4970,
+      "lastIndex": 4973,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "end": {
+      "scrollTop": 1449052,
+      "scrollHeight": 1449472,
+      "itemCount": 14,
+      "firstIndex": 10006,
+      "lastIndex": 10009,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "firstTail": "9996",
+    "error": "Timeout waiting for: render to settle (3 consecutive stable geometry reads)",
+    "final": {
+      "scrollTop": 1443052,
+      "firstRendered": "9996",
+      "height": 1449472,
+      "text": "Item 9996\nItem 9997\nItem 9998\nItem 9999\nItem 10000\n\nAdditional details for this item.\n\nItem 10001\nItem 10002\nItem 10003\nItem 10004\nItem 10005\n\nAdditional details for this item.\n\nItem 10006\nItem 10007\nItem 10008\nItem 10009"
+    },
+    "ok": false
+  },
+  "main-none-async": {
+    "errors": [],
+    "initial": {
+      "scrollTop": 0,
+      "scrollHeight": 1200360,
+      "itemCount": 15,
+      "firstIndex": 1,
+      "lastIndex": 4,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "bounds": {
+      "root": {
+        "x": 8,
+        "y": 159,
+        "width": 1184,
+        "height": 422,
+        "top": 159,
+        "right": 1192,
+        "bottom": 581,
+        "left": 8
+      },
+      "innerHeight": 900
+    },
+    "middle": {
+      "scrollTop": 599970,
+      "scrollHeight": 1406967,
+      "itemCount": 14,
+      "firstIndex": 4265,
+      "lastIndex": 4267,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "end": {
+      "scrollTop": 1372243,
+      "scrollHeight": 1372663,
+      "itemCount": 14,
+      "firstIndex": 10006,
+      "lastIndex": 10009,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "firstTail": "9996",
+    "upward": {
+      "scrollTop": 1366243,
+      "scrollHeight": 1372783,
+      "itemCount": 14,
+      "firstIndex": 9963,
+      "lastIndex": 9965,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "final": {
+      "scrollTop": 1366243,
+      "firstRendered": "9957",
+      "height": 1372783,
+      "text": "Item 9957\nItem 9958\nItem 9959\nItem 9960\n\nAdditional details for this item.\n\nItem 9961\nItem 9962\nItem 9963\nItem 9964\nItem 9965\n\nAdditional details for this item.\n\nItem 9966\nItem 9967\nItem 9968\nItem 9969\nItem 9970\n\nAdditional details for this item."
+    },
+    "ok": true
+  },
+  "main-none-async-clipped": {
+    "errors": [],
+    "initial": {
+      "scrollTop": 0,
+      "scrollHeight": 1200360,
+      "itemCount": 15,
+      "firstIndex": 1,
+      "lastIndex": 4,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "bounds": {
+      "root": {
+        "x": 8,
+        "y": 159,
+        "width": 1184,
+        "height": 422,
+        "top": 159,
+        "right": 1192,
+        "bottom": 581,
+        "left": 8
+      },
+      "innerHeight": 380
+    },
+    "middle": {
+      "scrollTop": 599970,
+      "scrollHeight": 1406967,
+      "itemCount": 14,
+      "firstIndex": 4265,
+      "lastIndex": 4267,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "end": {
+      "scrollTop": 1372243,
+      "scrollHeight": 1372663,
+      "itemCount": 14,
+      "firstIndex": 10006,
+      "lastIndex": 10009,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "firstTail": "9996",
+    "upward": {
+      "scrollTop": 1366243,
+      "scrollHeight": 1372783,
+      "itemCount": 14,
+      "firstIndex": 9963,
+      "lastIndex": 9965,
+      "topCovered": true,
+      "bottomCovered": true,
+      "clientHeight": 420
+    },
+    "final": {
+      "scrollTop": 1366243,
+      "firstRendered": "9957",
+      "height": 1372783,
+      "text": "Item 9957\nItem 9958\nItem 9959\nItem 9960\n\nAdditional details for this item.\n\nItem 9961\nItem 9962\nItem 9963\nItem 9964\nItem 9965\n\nAdditional details for this item.\n\nItem 9966\nItem 9967\nItem 9968\nItem 9969\nItem 9970\n\nAdditional details for this item."
+    },
+    "ok": true
+  },
+  "tip-selenium-observed": {
+    "completedSuiteSummary": false,
+    "cases": [
+      {
+        "outcome": "Passed",
+        "case": "Microsoft.AspNetCore.Components.E2ETest.Tests.VirtualizationTest.ScrollToItem_AfterAppendingVariableHeightItems_CanScrollUp(anchorMode: \"2\", useProvider: False) [31 s]"
+      },
+      {
+        "outcome": "Failed",
+        "case": "Microsoft.AspNetCore.Components.E2ETest.Tests.VirtualizationTest.ScrollToItem_AfterAppendingVariableHeightItems_CanScrollUp(anchorMode: \"0\", useProvider: False) [2 m 20 s]"
+      },
+      {
+        "outcome": "Failed",
+        "case": "Microsoft.AspNetCore.Components.E2ETest.Tests.VirtualizationTest.ScrollToItem_AfterAppendingVariableHeightItems_CanScrollUp(anchorMode: \"0\", useProvider: True) [2 m 19 s]"
+      },
+      {
+        "outcome": "Passed",
+        "case": "Microsoft.AspNetCore.Components.E2ETest.Tests.VirtualizationTest.ScrollToItem_AfterAppendingVariableHeightItems_CanScrollUp(anchorMode: \"2\", useProvider: True) [27 s]"
+      }
+    ]
+  },
+  "main-selenium-observed": {
+    "completedSuiteSummary": false,
+    "cases": [
+      {
+        "outcome": "Failed",
+        "case": "Microsoft.AspNetCore.Components.E2ETest.Tests.VirtualizationTest.ScrollToItem_AfterAppendingVariableHeightItems_CanScrollUp(anchorMode: \"2\", useProvider: False) [1 m 33 s]"
+      },
+      {
+        "outcome": "Failed",
+        "case": "Microsoft.AspNetCore.Components.E2ETest.Tests.VirtualizationTest.ScrollToItem_AfterAppendingVariableHeightItems_CanScrollUp(anchorMode: \"0\", useProvider: False) [1 m 30 s]"
+      },
+      {
+        "outcome": "Failed",
+        "case": "Microsoft.AspNetCore.Components.E2ETest.Tests.VirtualizationTest.ScrollToItem_AfterAppendingVariableHeightItems_CanScrollUp(anchorMode: \"0\", useProvider: True) [1 m 38 s]"
+      },
+      {
+        "outcome": "Failed",
+        "case": "Microsoft.AspNetCore.Components.E2ETest.Tests.VirtualizationTest.ScrollToItem_AfterAppendingVariableHeightItems_CanScrollUp(anchorMode: \"2\", useProvider: True) [1 m 36 s]"
+      }
+    ]
+  },
+  "assertionCaveat": "Exploratory Selenium generalization applied an End-only near-tail index bound to non-End modes. Do not treat those case outcomes alone as non-End defects; use independently recorded blank-viewport geometry. No complete-suite result is claimed for stopped explorations."
+}
