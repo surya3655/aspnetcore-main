@@ -1,0 +1,51 @@
+{
+  "implementationCommit": "1320e91217",
+  "main": "d3483989953ae3cccd773aea5ea04cb0c7198531",
+  "managed": {
+    "total": 63,
+    "passed": 63,
+    "withoutOption1": {
+      "total": 63,
+      "passed": 54,
+      "failedExpected": 9
+    },
+    "mainParitySubsetPassed": 9
+  },
+  "javascript": {
+    "total": 1,
+    "passed": 1,
+    "scope": "export contract only"
+  },
+  "selenium": {
+    "total": 7,
+    "passed": 7,
+    "scope": "original End WebAssembly/Server plus Server Start/None and End/Start/None async; near-tail bound only End"
+  },
+  "canonicalServerMatrix": {
+    "total": 6,
+    "passed": 6
+  },
+  "canonicalStartNoneFixedRepeats": {
+    "before": {
+      "runs": 20,
+      "failed": 20
+    },
+    "after": {
+      "runs": 20,
+      "passed": 20
+    }
+  },
+  "timing": {
+    "orderedStaleSampleRuns": 10,
+    "orderedStaleSampleObserved": 10,
+    "sameBatchRuns": 10,
+    "sameBatchMarkerLossObserved": 10
+  },
+  "limitations": [
+    "existing End sample/estimate association and marker-loss behavior intentionally unchanged",
+    "independently confirmed nine-append WebAssembly None/fixed blank viewport on main and tip",
+    "earlier End-specific all-mode near-tail assertion failures discarded as invalid proof",
+    "no full repository/platform/performance guarantee",
+    "main merged rather than rebased; remote PR not updated"
+  ]
+}

@@ -1,0 +1,363 @@
+diff --git a/src/Components/Web/src/Virtualization/Virtualize.cs b/src/Components/Web/src/Virtualization/Virtualize.cs
+index 03ef49cd9d..f7fd2399f3 100644
+--- a/src/Components/Web/src/Virtualization/Virtualize.cs
++++ b/src/Components/Web/src/Virtualization/Virtualize.cs
+@@ -929,7 +929,7 @@ public sealed class Virtualize<TItem> : ComponentBase, IVirtualizeJsCallbacks, I
+     {
+         var hadNewMeasurements = AccumulateMeasurement(spacerSeparation);
+         RecalibrateItemSize(spacerSeparation);
+-        var spacerItemSize = GetEffectiveItemSize(_lastRenderedItemSize);
++        var spacerItemSize = GetEffectiveItemSize((AnchorMode & VirtualizeAnchorMode.End) != 0 ? _lastRenderedItemSize : GetItemHeight());
+         var effectiveItemSize = GetEffectiveItemSize(GetItemHeight());
+ 
+         // This AppContext data was added as a stopgap for .NET 8 and earlier, since it was added in a patch
+diff --git a/src/Components/Web/test/Virtualization/VirtualizeTest.cs b/src/Components/Web/test/Virtualization/VirtualizeTest.cs
+index c6dc487805..a9f9009ebc 100644
+--- a/src/Components/Web/test/Virtualization/VirtualizeTest.cs
++++ b/src/Components/Web/test/Virtualization/VirtualizeTest.cs
+@@ -155,6 +155,179 @@ public class VirtualizeTest
+         Assert.Equal(0, virtualize._itemsBefore);
+     }
+ 
++    [Theory]
++    [InlineData(VirtualizeAnchorMode.Start, true, 25f, 215, 50)]
++    [InlineData(VirtualizeAnchorMode.Start, true, 100f, 42, 35)]
++    [InlineData(VirtualizeAnchorMode.None, true, 25f, 215, 50)]
++    [InlineData(VirtualizeAnchorMode.None, true, 100f, 42, 35)]
++    [InlineData(VirtualizeAnchorMode.Start, false, 25f, 365, 50)]
++    [InlineData(VirtualizeAnchorMode.Start, false, 100f, 830, 35)]
++    [InlineData(VirtualizeAnchorMode.None, false, 25f, 365, 50)]
++    [InlineData(VirtualizeAnchorMode.None, false, 100f, 830, 35)]
++    public async Task Virtualize_Recalibration_WithoutEndAnchor_UsesCurrentEstimate(
++        VirtualizeAnchorMode anchorMode, bool beforeSpacer, float measuredItemSize, int expectedItemsBefore, int expectedCapacity)
++    {
++        Virtualize<int> virtualize = null;
++        var rootComponent = new VirtualizeTestHostcomponent
++        {
++            InnerContent = BuildVirtualizeWithContent(50f, Enumerable.Range(0, 1000).ToList(),
++                v => virtualize = v, anchorMode: anchorMode)
++        };
++        var services = new ServiceCollection().AddSingleton(Mock.Of<IJSRuntime>()).BuildServiceProvider();
++        await using var renderer = new TestRenderer(services);
++        var componentId = renderer.AssignRootComponentId(rootComponent);
++        await renderer.RenderRootComponentAsync(componentId);
++        var callbacks = (IVirtualizeJsCallbacks)virtualize;
++
++        await renderer.Dispatcher.InvokeAsync(() =>
++            callbacks.OnBeforeSpacerVisible(5750f, 0f, 500f, SpacerVisibilityReason.UserScroll));
++        Assert.Equal(100, virtualize._itemsBefore);
++        Assert.Equal(40, virtualize._lastRenderedItemCount);
++
++        await renderer.Dispatcher.InvokeAsync(() =>
++        {
++            if (beforeSpacer)
++            {
++                callbacks.OnBeforeSpacerVisible(5750f, 40 * measuredItemSize, 500f, SpacerVisibilityReason.UserScroll);
++            }
++            else
++            {
++                callbacks.OnAfterSpacerVisible(15000f, 40 * measuredItemSize, 500f, SpacerVisibilityReason.UserScroll);
++            }
++        });
++
++        Assert.Equal(expectedItemsBefore, virtualize._itemsBefore);
++        Assert.Equal(expectedCapacity, virtualize._lastRenderedItemCount);
++        Assert.Equal(0, virtualize._lastRenderedPlaceholderCount);
++        var virtualizeId = renderer.Batches.SelectMany(batch => batch.ReferenceFrames)
++            .Single(frame => frame.FrameType == RenderTreeFrameType.Component && ReferenceEquals(frame.Component, virtualize)).ComponentId;
++        var attributes = renderer.GetCurrentRenderTreeFrames(virtualizeId).AsEnumerable()
++            .Where(frame => frame.FrameType == RenderTreeFrameType.Attribute).ToArray();
++        Assert.DoesNotContain(attributes, frame => frame.AttributeName == "data-blazor-virtualize-scroll-recalibration");
++        Assert.Equal((expectedItemsBefore * measuredItemSize).ToString(CultureInfo.InvariantCulture),
++            attributes.First(frame => frame.AttributeName == "data-blazor-virtualize-reserved-height").AttributeValue);
++    }
++
++    [Theory]
++    [InlineData(true, 25f, 99, 50)]
++    [InlineData(true, 100f, 99, 35)]
++    [InlineData(false, 25f, 665, 50)]
++    [InlineData(false, 100f, 680, 35)]
++    public async Task Virtualize_Recalibration_EndAnchor_PreservesRenderedEstimateAndCorrection(
++        bool beforeSpacer, float measuredItemSize, int expectedItemsBefore, int expectedCapacity)
++    {
++        Virtualize<int> virtualize = null;
++        var rootComponent = new VirtualizeTestHostcomponent
++        {
++            InnerContent = BuildVirtualizeWithContent(50f, Enumerable.Range(0, 1000).ToList(),
++                v => virtualize = v, anchorMode: VirtualizeAnchorMode.End)
++        };
++        var services = new ServiceCollection().AddSingleton(Mock.Of<IJSRuntime>()).BuildServiceProvider();
++        await using var renderer = new TestRenderer(services);
++        var componentId = renderer.AssignRootComponentId(rootComponent);
++        await renderer.RenderRootComponentAsync(componentId);
++        var callbacks = (IVirtualizeJsCallbacks)virtualize;
++
++        await renderer.Dispatcher.InvokeAsync(() =>
++            callbacks.OnBeforeSpacerVisible(5750f, 0f, 500f, SpacerVisibilityReason.UserScroll));
++        Assert.Equal(100, virtualize._itemsBefore);
++        Assert.Equal(40, virtualize._lastRenderedItemCount);
++        await renderer.Dispatcher.InvokeAsync(() =>
++        {
++            if (beforeSpacer)
++            {
++                callbacks.OnBeforeSpacerVisible(5750f, 40 * measuredItemSize, 500f, SpacerVisibilityReason.UserScroll);
++            }
++            else
++            {
++                callbacks.OnAfterSpacerVisible(15000f, 40 * measuredItemSize, 500f, SpacerVisibilityReason.UserScroll);
++            }
++        });
++
++        Assert.Equal(expectedItemsBefore, virtualize._itemsBefore);
++        Assert.Equal(expectedCapacity, virtualize._lastRenderedItemCount);
++        var virtualizeId = renderer.Batches.SelectMany(batch => batch.ReferenceFrames)
++            .Single(frame => frame.FrameType == RenderTreeFrameType.Component && ReferenceEquals(frame.Component, virtualize)).ComponentId;
++        var recalibrations = renderer.GetCurrentRenderTreeFrames(virtualizeId).AsEnumerable()
++            .Where(frame => frame.FrameType == RenderTreeFrameType.Attribute
++                && frame.AttributeName == "data-blazor-virtualize-scroll-recalibration").ToArray();
++        if (beforeSpacer)
++        {
++            Assert.Equal($"50:{measuredItemSize.ToString(CultureInfo.InvariantCulture)}", Assert.Single(recalibrations).AttributeValue);
++        }
++        else
++        {
++            Assert.Empty(recalibrations);
++        }
++
++        await renderer.RenderRootComponentAsync(componentId);
++        Assert.DoesNotContain(renderer.GetCurrentRenderTreeFrames(virtualizeId).AsEnumerable(),
++            frame => frame.FrameType == RenderTreeFrameType.Attribute
++                && frame.AttributeName == "data-blazor-virtualize-scroll-recalibration");
++    }
++
++    [Fact]
++    public async Task Virtualize_Recalibration_AsyncProvider_PreservesLoadingAndCancellation()
++    {
++        var requests = new List<ItemsProviderRequest>();
++        var pending = new List<TaskCompletionSource<ItemsProviderResult<int>>>();
++        var delay = false;
++        ValueTask<ItemsProviderResult<int>> Provider(ItemsProviderRequest request)
++        {
++            requests.Add(request);
++            if (delay)
++            {
++                var completion = new TaskCompletionSource<ItemsProviderResult<int>>();
++                pending.Add(completion);
++                return new(completion.Task);
++            }
++
++            return ValueTask.FromResult(new ItemsProviderResult<int>(Enumerable.Range(request.StartIndex, request.Count), 1000));
++        }
++
++        var (virtualize, renderer) = await CreateRenderedVirtualize(50f, 1000, Provider, SimpleItemTemplate);
++        var callbacks = (IVirtualizeJsCallbacks)virtualize;
++        await renderer.Dispatcher.InvokeAsync(() =>
++            callbacks.OnAfterSpacerVisible(0f, 0f, 500f, SpacerVisibilityReason.ViewportFill));
++        await renderer.Dispatcher.InvokeAsync(() =>
++            callbacks.OnBeforeSpacerVisible(5750f, 0f, 500f, SpacerVisibilityReason.UserScroll));
++        Assert.Equal(100, virtualize._itemsBefore);
++        Assert.Equal(40, virtualize._lastRenderedItemCount);
++
++        delay = true;
++        await renderer.Dispatcher.InvokeAsync(() =>
++            callbacks.OnBeforeSpacerVisible(5750f, 4000f, 500f, SpacerVisibilityReason.UserScroll));
++        Assert.Equal(42, requests[^1].StartIndex);
++        Assert.Equal(35, requests[^1].Count);
++        Assert.Equal(0, virtualize._lastRenderedItemCount);
++        Assert.Equal(35, virtualize._lastRenderedPlaceholderCount);
++        var virtualizeId = renderer.Batches.SelectMany(batch => batch.ReferenceFrames)
++            .Single(frame => frame.FrameType == RenderTreeFrameType.Component && ReferenceEquals(frame.Component, virtualize)).ComponentId;
++        Assert.Contains(renderer.GetCurrentRenderTreeFrames(virtualizeId).AsEnumerable(),
++            frame => frame.FrameType == RenderTreeFrameType.Attribute && frame.AttributeName == "data-blazor-virtualize-loading");
++        var canceledRequest = requests[^1];
++        await renderer.Dispatcher.InvokeAsync(() =>
++            callbacks.OnBeforeSpacerVisible(5250f, 0f, 500f, SpacerVisibilityReason.UserScroll));
++        Assert.True(canceledRequest.CancellationToken.IsCancellationRequested);
++        Assert.Equal(37, requests[^1].StartIndex);
++        Assert.Equal(35, requests[^1].Count);
++        Assert.False(requests[^1].CancellationToken.IsCancellationRequested);
++        Assert.Equal(4, requests.Count);
++
++        await renderer.Dispatcher.InvokeAsync(() => pending[0].SetResult(new(Enumerable.Range(42, 35), 1000)));
++        Assert.Equal(0, virtualize._lastRenderedItemCount);
++        await renderer.Dispatcher.InvokeAsync(() => pending[1].SetResult(new(Enumerable.Range(37, 35), 1000)));
++        Assert.Equal(37, virtualize._itemsBefore);
++        Assert.Equal(35, virtualize._lastRenderedItemCount);
++        Assert.Equal(0, virtualize._lastRenderedPlaceholderCount);
++        Assert.Equal(4, requests.Count);
++        var frames = renderer.GetCurrentRenderTreeFrames(virtualizeId).AsEnumerable().ToArray();
++        Assert.DoesNotContain(frames,
++            frame => frame.FrameType == RenderTreeFrameType.Attribute && frame.AttributeName == "data-blazor-virtualize-loading");
++        Assert.Equal(Enumerable.Range(37, 35).Select(item => item.ToString(CultureInfo.InvariantCulture)),
++            frames.Where(frame => frame.FrameType == RenderTreeFrameType.Text).Select(frame => frame.TextContent));
++    }
++
+     [Fact]
+     public async Task InitialIndex_MeasurementDoesNotChangeSpacerUntilPositioningCompletes()
+     {
+diff --git a/src/Components/test/E2ETest/ServerExecutionTests/TestSubclasses.cs b/src/Components/test/E2ETest/ServerExecutionTests/TestSubclasses.cs
+index 16b42bed61..95db200ab7 100644
+--- a/src/Components/test/E2ETest/ServerExecutionTests/TestSubclasses.cs
++++ b/src/Components/test/E2ETest/ServerExecutionTests/TestSubclasses.cs
+@@ -124,6 +124,19 @@ public class ServerVirtualizationTest : VirtualizationTest
+ 
+     public override void ScrollToItem_EndAnchor_AfterAppendingVariableHeightItems_CanScrollUp()
+         => base.ScrollToItem_EndAnchor_AfterAppendingVariableHeightItems_CanScrollUp();
++
++    [Theory]
++    [InlineData("1")]
++    [InlineData("0")]
++    public void ScrollToItem_AfterAppendingVariableHeightItems_CanScrollUp_NonEndAnchor(string anchorMode)
++        => AssertCanScrollUpAfterAppendingVariableHeightItems(anchorMode, useProvider: false, appendInSingleBatch: true);
++
++    [Theory]
++    [InlineData("2")]
++    [InlineData("1")]
++    [InlineData("0")]
++    public void ScrollToItem_AfterAppendingVariableHeightItems_CanScrollUp_AsyncProvider(string anchorMode)
++        => AssertCanScrollUpAfterAppendingVariableHeightItems(anchorMode, useProvider: true, appendInSingleBatch: true);
+ }
+ 
+ public class ServerDynamicComponentRenderingTest : DynamicComponentRenderingTest
+diff --git a/src/Components/test/E2ETest/Tests/VirtualizationTest.cs b/src/Components/test/E2ETest/Tests/VirtualizationTest.cs
+index 150ab18ed0..65fa531b3f 100644
+--- a/src/Components/test/E2ETest/Tests/VirtualizationTest.cs
++++ b/src/Components/test/E2ETest/Tests/VirtualizationTest.cs
+@@ -6634,36 +6634,60 @@ public class VirtualizationTest : ServerTestBase<ToggleExecutionModeServerFixtur
+ 
+     [Fact]
+     public virtual void ScrollToItem_EndAnchor_AfterAppendingVariableHeightItems_CanScrollUp()
++        => AssertCanScrollUpAfterAppendingVariableHeightItems("2", useProvider: false, appendInSingleBatch: false);
++
++    protected void AssertCanScrollUpAfterAppendingVariableHeightItems(string anchorMode, bool useProvider, bool appendInSingleBatch)
+     {
++        Browser.SetWindowSize(1200, 900);
+         Browser.MountTestComponent<VirtualizationAppendAndScroll>();
+         var container = Browser.Exists(By.Id("scroll-container"));
+         var js = (IJavaScriptExecutor)Browser;
+ 
+         WaitForRenderToSettle(container, js);
+-        new SelectElement(Browser.Exists(By.Id("anchor-mode-select"))).SelectByValue("2");
+-        Browser.Equal("2", () => container.GetDomAttribute("data-anchor-mode"));
+-        Browser.True(() => GetTopRenderedIndex(js) > 9990);
++        if (useProvider)
++        {
++            Browser.Exists(By.Id("use-provider")).Click();
++            Browser.Equal("async", () => container.GetDomAttribute("data-provider"));
++            WaitForRenderToSettle(container, js);
++        }
++        new SelectElement(Browser.Exists(By.Id("anchor-mode-select"))).SelectByValue(anchorMode);
++        Browser.Equal(anchorMode, () => container.GetDomAttribute("data-anchor-mode"));
++        if (anchorMode == "2")
++        {
++            Browser.True(() => GetTopRenderedIndex(js) > 9990);
++        }
+         WaitForRenderToSettle(container, js);
+ 
+         ScrollContainerWithWheelTo(js, container, (int)(GetMaximumScrollTop(js, container) / 2));
+         Browser.True(() => GetTopRenderedIndex(js) is > 4000 and < 6000);
+         WaitForRenderToSettle(container, js);
+ 
+-        for (var i = 1; i <= 9; i++)
++        var expectedItemCount = appendInSingleBatch ? 10_010 : 10_009;
++        if (appendInSingleBatch)
+         {
+-            Browser.Exists(By.Id("append-one-item")).Click();
+-            Browser.Equal((10_000 + i).ToString(CultureInfo.InvariantCulture),
++            Browser.Exists(By.Id("append-ten-items")).Click();
++            Browser.Equal(expectedItemCount.ToString(CultureInfo.InvariantCulture),
+                 () => Browser.Exists(By.Id("total-item-count")).Text);
+             WaitForRenderToSettle(container, js);
+         }
++        else
++        {
++            for (var i = 1; i <= 9; i++)
++            {
++                Browser.Exists(By.Id("append-one-item")).Click();
++                Browser.Equal((10_000 + i).ToString(CultureInfo.InvariantCulture),
++                    () => Browser.Exists(By.Id("total-item-count")).Text);
++                WaitForRenderToSettle(container, js);
++            }
++        }
+ 
+         Browser.True(() => GetTopRenderedIndex(js) is > 4000 and < 6000,
+             "Appending while away from the end must leave the viewport in the middle before jumping.");
+ 
+         Browser.Exists(By.Id("scroll-to-end")).Click();
+-        WaitForScrollStatus("Completed: 10009");
++        WaitForScrollStatus($"Completed: {expectedItemCount}");
+         Browser.True(() => GetTopRenderedIndex(js) > 9990);
+-        Browser.Equal(10009L, () => GetBottomRenderedIndex(js));
++        Browser.Equal((long)expectedItemCount, () => GetBottomRenderedIndex(js));
+         Browser.True(() => ViewportEdgeCoveredByRealItem(js, "bottom"));
+         WaitForRenderToSettle(container, js, trackScrollHeight: true);
+ 
+@@ -6678,12 +6702,13 @@ public class VirtualizationTest : ServerTestBase<ToggleExecutionModeServerFixtur
+         Browser.True(() =>
+         {
+             var firstVisibleIndex = GetTopRenderedIndex(js);
+-            // At least 120px per row: a 6000px wheel must not jump far beyond the tail.
+-            return firstVisibleIndex >= firstTailIndex - 60
++            // Only End mode compensates for recalibration to preserve the estimated item position.
++            return firstVisibleIndex >= 0
+                 && firstVisibleIndex < firstTailIndex
++                && (anchorMode != "2" || firstVisibleIndex >= firstTailIndex - 60)
+                 && ViewportEdgeCoveredByRealItem(js, "top")
+                 && ViewportEdgeCoveredByRealItem(js, "bottom");
+-        }, "Wheeling above the rendered tail must show nearby earlier items and cover the viewport instead of exposing the leading spacer.");
++        }, "Wheeling above the rendered tail must show earlier items and cover the viewport instead of exposing the leading spacer.");
+     }
+ 
+     [Theory]
+diff --git a/src/Components/test/testassets/BasicTestApp/VirtualizationAppendAndScroll.razor b/src/Components/test/testassets/BasicTestApp/VirtualizationAppendAndScroll.razor
+index 0a5b937f50..f8d28ce027 100644
+--- a/src/Components/test/testassets/BasicTestApp/VirtualizationAppendAndScroll.razor
++++ b/src/Components/test/testassets/BasicTestApp/VirtualizationAppendAndScroll.razor
+@@ -1,15 +1,18 @@
+ @using Microsoft.AspNetCore.Components.Web.Virtualization
+ 
+ <select id="anchor-mode-select" @bind="anchorMode">
++    <option value="0">None</option>
+     <option value="1">Start</option>
+     <option value="2">End</option>
+ </select>
+-<button id="append-one-item" @onclick="Append" disabled="@InteractionUnavailable">Add at end</button>
++<label><input id="use-provider" type="checkbox" @bind="useProvider" /> Async ItemsProvider</label>
++<button id="append-one-item" @onclick="() => Append(1)" disabled="@InteractionUnavailable">Add at end</button>
++<button id="append-ten-items" @onclick="() => Append(10)" disabled="@InteractionUnavailable">Add ten at end</button>
+ <button id="scroll-to-end" @onclick="ScrollToEndAsync" disabled="@InteractionUnavailable">Go to end</button>
+ <p id="total-item-count">@items.Count</p>
+-<div id="scroll-container" data-anchor-mode="@anchorMode" tabindex="0"
++<div id="scroll-container" data-anchor-mode="@anchorMode" data-provider="@(useProvider ? "async" : "items")" tabindex="0"
+      style="height: 420px; overflow-y: auto; border: 1px solid black;">
+-    <Virtualize @ref="virtualizer" Items="items" Context="item" ItemSize="120" OverscanCount="5" AnchorMode="@((VirtualizeAnchorMode)anchorMode)">
++    <Virtualize @key="useProvider" @ref="virtualizer" Items="@(useProvider ? null : items)" ItemsProvider="@(useProvider ? GetItemsAsync : null)" Context="item" ItemSize="120" OverscanCount="5" AnchorMode="@((VirtualizeAnchorMode)anchorMode)">
+         <article @key="item" class="item" data-index="@item"
+                  style="box-sizing: border-box; height: @(item % 5 == 0 ? 240 : 120)px; padding: 16px; border-bottom: 1px solid gray;">
+             Item @item
+@@ -27,10 +30,24 @@
+     private Virtualize<int> virtualizer = default!;
+     private int anchorMode = 1;
+     private bool jumping;
++    private bool useProvider;
+     private string status = "Ready";
+     private bool InteractionUnavailable => !RendererInfo.IsInteractive || jumping;
+ 
+-    private void Append() => items = [.. items, items.Count + 1];
++    private async Task Append(int count)
++    {
++        items = [.. items, .. Enumerable.Range(items.Count + 1, count)];
++        if (useProvider)
++        {
++            await virtualizer.RefreshDataAsync();
++        }
++    }
++
++    private async ValueTask<ItemsProviderResult<int>> GetItemsAsync(ItemsProviderRequest request)
++    {
++        await Task.Yield();
++        return new(items.Skip(request.StartIndex).Take(request.Count).ToArray(), items.Count);
++    }
+ 
+     private async Task ScrollToEndAsync()
+     {

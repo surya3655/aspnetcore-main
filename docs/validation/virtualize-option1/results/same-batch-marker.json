@@ -1,0 +1,120 @@
+{
+  "reports": [
+    {
+      "seq": 0,
+      "method": "OnSpacerBeforeVisible",
+      "args": [
+        0,
+        0,
+        518,
+        2
+      ],
+      "producedEstimate": null,
+      "produced": 374.9000000001397,
+      "deliveryEstimate": null,
+      "delivered": 374.9000000001397
+    },
+    {
+      "seq": 1,
+      "method": "OnSpacerAfterVisible",
+      "args": [
+        0.03125,
+        2160,
+        518,
+        2
+      ],
+      "producedEstimate": null,
+      "produced": 543.1000000000931,
+      "deliveryEstimate": null,
+      "delivered": 543.1000000000931
+    },
+    {
+      "seq": 2,
+      "method": "OnSpacerBeforeVisible",
+      "args": [
+        1436555.96875,
+        2040,
+        518,
+        0
+      ],
+      "producedEstimate": 144,
+      "produced": 810.1000000000931,
+      "deliveryEstimate": 144,
+      "delivered": 930.6999999999534
+    },
+    {
+      "seq": 3,
+      "method": "OnSpacerBeforeVisible",
+      "args": [
+        1436555.96875,
+        2040,
+        518,
+        0
+      ],
+      "producedEstimate": 144,
+      "produced": 910,
+      "deliveryEstimate": 144.827590011032,
+      "delivered": 981.1000000000931
+    },
+    {
+      "seq": 4,
+      "method": "OnSpacerBeforeVisible",
+      "args": [
+        1436556.0930990728,
+        2040.0001765835193,
+        518.0000448383643,
+        2
+      ],
+      "producedEstimate": 144.827590011032,
+      "produced": 965.6000000000931
+    }
+  ],
+  "writes": [
+    {
+      "kind": "set",
+      "value": "144:144.82759",
+      "at": 932.6999999999534
+    },
+    {
+      "kind": "remove",
+      "at": 935.3000000000466
+    },
+    {
+      "kind": "set",
+      "value": "144.82759:145.11627",
+      "at": 988.6999999999534
+    }
+  ],
+  "deliveries": [
+    {
+      "at": 935.4000000001397,
+      "records": [
+        {
+          "name": "data-blazor-virtualize-scroll-recalibration",
+          "live": null
+        },
+        {
+          "name": "data-blazor-virtualize-scroll-recalibration",
+          "live": null
+        }
+      ]
+    },
+    {
+      "at": 990.6999999999534,
+      "records": [
+        {
+          "name": "data-blazor-virtualize-scroll-recalibration",
+          "live": "144.82759:145.11627"
+        }
+      ]
+    }
+  ],
+  "estimateA": 144,
+  "estimateB": 144.827590011032,
+  "released": [
+    2,
+    3
+  ],
+  "sameBatch": true,
+  "markerLost": true
+}
