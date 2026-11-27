@@ -331,7 +331,9 @@ namespace Microsoft.AspNetCore.Http.Generated
         [UnconditionalSuppressMessage("AOT", "IL3050:RequiresDynamicCode", Justification = "See above.")]
         private static Task WriteJsonResponseAsync<T>(HttpResponse response, T? value, JsonTypeInfo<T?> jsonTypeInfo)
         {
-            if (value is global::System.Runtime.CompilerServices.IUnion { Value: IResult result })
+            if (value is global::System.Runtime.CompilerServices.IUnion { Value: IResult result } &&
+                jsonTypeInfo.Options.GetTypeInfo(value.GetType()) is { Kind: JsonTypeInfoKind.Union, UnionCases: { Count: > 0 } cases } &&
+                cases.All(static unionCase => typeof(IResult).IsAssignableFrom(unionCase.CaseType)))
             {
                 return result.ExecuteAsync(response.HttpContext);
             }

@@ -567,14 +567,35 @@ public abstract partial class RequestDelegateCreationTests : RequestDelegateCrea
     }
 
     [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
-    public async Task MapAction_ReturnsMixedResultUnion_PreservesDataSerialization(bool resultCase)
+    [InlineData("sync", true)]
+    [InlineData("sync", false)]
+    [InlineData("task", true)]
+    [InlineData("task", false)]
+    [InlineData("valuetask", true)]
+    [InlineData("valuetask", false)]
+    [InlineData("nullable", true)]
+    [InlineData("nullable", false)]
+    [InlineData("object", true)]
+    [InlineData("object", false)]
+    [InlineData("filter", true)]
+    [InlineData("filter", false)]
+    public async Task MapAction_ReturnsMixedResultUnion_PreservesDataSerialization(string returnStyle, bool resultCase)
     {
-        var source = """
-            app.MapGet("/mixed", (bool resultCase) => resultCase
+        var handler = returnStyle switch
+        {
+            "sync" or "filter" => "(bool resultCase) => CreateResult(resultCase)",
+            "task" => "(bool resultCase) => Task.FromResult(CreateResult(resultCase))",
+            "valuetask" => "(bool resultCase) => ValueTask.FromResult(CreateResult(resultCase))",
+            "nullable" => "(bool resultCase) => (UnionResultOrData?)CreateResult(resultCase)",
+            "object" => "(bool resultCase) => (object)CreateResult(resultCase)",
+            _ => throw new InvalidOperationException(returnStyle)
+        };
+        var filter = returnStyle is "filter" ? ".AddEndpointFilter((context, next) => next(context))" : "";
+        var source = $$"""
+            static UnionResultOrData CreateResult(bool resultCase) => resultCase
                 ? new UnionResultOrData(TypedResults.Ok(new Todo { Id = 1, Name = "ann", IsComplete = false }))
-                : new UnionResultOrData("plain"));
+                : new UnionResultOrData("plain");
+            app.MapGet("/mixed", {{handler}}){{filter}};
             """;
         var (_, compilation) = await RunGeneratorAsync(source);
         var endpoint = GetEndpointFromCompilation(compilation);
@@ -584,8 +605,15 @@ public abstract partial class RequestDelegateCreationTests : RequestDelegateCrea
         await endpoint.RequestDelegate(context);
 
         Assert.Equal(200, context.Response.StatusCode);
-        await VerifyResponseBodyAsync(context, resultCase ? "{\"id\":1,\"name\":\"ann\",\"isComplete\":false}" : "\"plain\"");
-        Assert.Equal(typeof(UnionResultOrData), Assert.Single(endpoint.Metadata.OfType<IProducesResponseTypeMetadata>()).Type);
+        Assert.Equal("application/json; charset=utf-8", context.Response.ContentType);
+        await VerifyResponseBodyAsync(context, resultCase ? "{\"value\":{\"id\":1,\"name\":\"ann\",\"isComplete\":false},\"statusCode\":200}" : "\"plain\"");
+        var expectedType = returnStyle switch
+        {
+            "object" => typeof(object),
+            "nullable" => typeof(UnionResultOrData?),
+            _ => typeof(UnionResultOrData)
+        };
+        Assert.Equal(expectedType, Assert.Single(endpoint.Metadata.OfType<IProducesResponseTypeMetadata>()).Type);
     }
 
     [Fact]

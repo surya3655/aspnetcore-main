@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization.Metadata;
 using Microsoft.AspNetCore.Http;
@@ -39,7 +40,9 @@ internal static class ExecuteHandlerHelper
     [UnconditionalSuppressMessage("AOT", "IL3050:RequiresDynamicCode", Justification = "See above.")]
     public static Task WriteJsonResponseAsync<T>(HttpResponse response, T? value, JsonTypeInfo<T> jsonTypeInfo)
     {
-        if (value is IUnion { Value: IResult result })
+        if (value is IUnion { Value: IResult result } &&
+            jsonTypeInfo.Options.GetTypeInfo(value.GetType()) is { Kind: JsonTypeInfoKind.Union, UnionCases: { Count: > 0 } cases } &&
+            cases.All(static unionCase => typeof(IResult).IsAssignableFrom(unionCase.CaseType)))
         {
             return result.ExecuteAsync(response.HttpContext);
         }

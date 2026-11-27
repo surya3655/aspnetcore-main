@@ -2692,7 +2692,9 @@ public static partial class RequestDelegateFactory
     // leverage the STJ polymorphism support.
     private static Task WriteJsonResponseFast<T>(HttpResponse response, T value, JsonTypeInfo<T> jsonTypeInfo)
     {
-        if (value is IUnion { Value: IResult result })
+        if (value is IUnion { Value: IResult result } &&
+            jsonTypeInfo.Options.GetTypeInfo(value.GetType()) is { Kind: JsonTypeInfoKind.Union, UnionCases: { Count: > 0 } cases } &&
+            cases.All(static unionCase => typeof(IResult).IsAssignableFrom(unionCase.CaseType)))
         {
             return result.ExecuteAsync(response.HttpContext);
         }

@@ -45,7 +45,7 @@ internal static class EndpointJsonPreparationEmitter
 
     internal static string EmitJsonResponse(this EndpointResponse endpointResponse)
     {
-        // A union's active case may be an IResult even when other cases are data.
+        // Unions need to check whether every case is an IResult before executing the active case.
         if (!endpointResponse.IsUnion &&
             endpointResponse.ResponseType != null &&
             (endpointResponse.ResponseType.IsSealed || endpointResponse.ResponseType.IsValueType))
